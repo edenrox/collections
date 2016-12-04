@@ -1,11 +1,11 @@
 package com.hopkins.collections;
 
-public interface Collection<E> {
+public interface Collection<T> {
     /** Add the specified item to the collection. */
-    boolean add(E item);
+    boolean add(T item);
     
     /** Add the items in the specified collection to this collection. */ 
-    boolean addAll(Collection<? extends E> c);
+    boolean addAll(Collection<? extends T> c);
     
     /** Clear all the elements from this collection. */
     void clear();
@@ -23,7 +23,7 @@ public interface Collection<E> {
     boolean isEmpty();
     
     /** Returns an {@link Iterator} over the elements in this collection. */
-    Iterator<E> iterator();
+    Iterator<T> iterator();
     
     /** 
      * Removes a single instance of the specified item from this collection 
