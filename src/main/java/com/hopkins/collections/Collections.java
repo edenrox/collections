@@ -39,7 +39,7 @@ public final class Collections {
     }
     
     public static <T extends Comparable<? super T>> void sort(List<T> list) {
-        // TODO(edenrox)
+        sort(list, ComparableComparator.INSTANCE);
     }
     
     public static <T> void sort(List<T> list, Comparator<? super T> c) {
