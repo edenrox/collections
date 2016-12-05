@@ -5,6 +5,13 @@ import java.util.Objects;
 
 /** A fixed size {@link List} implementation backed by an Array. */
 final class FixedSizeList<T> implements List<T>, RandomAccess {
+    
+    static final <E> FixedSizeList<E> singletonList(E item) {
+        E[] array = (E[]) Array.newInstance(item.getClass(), 1);
+        array[0] = item;
+        return new FixedSizeList<>(array);
+    }
+    
     private final T[] data;
     
     FixedSizeList(T[] data) {
