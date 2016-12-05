@@ -1,6 +1,7 @@
 package com.hopkins.collections;
 
 import java.lang.reflect.Array;
+import java.util.Objects;
 
 /** A double linked list. */
 public class LinkedList<E> implements List<E>, Queue<E> {
@@ -47,6 +48,7 @@ public class LinkedList<E> implements List<E>, Queue<E> {
             tail = node;
         } else {
             node.next = head;
+            head.prev = node;
             head = node;
         }
     }
@@ -59,6 +61,7 @@ public class LinkedList<E> implements List<E>, Queue<E> {
             tail = node;
         } else {
             node.prev = tail;
+            tail.next = node;
             tail = node;
         }
     }
@@ -116,11 +119,7 @@ public class LinkedList<E> implements List<E>, Queue<E> {
         Node<E> cur = head;
         int index = 0;
         while (cur != null) {
-            if (cur.element == null) {
-                if (element == null) {
-                    return index;
-                }
-            } else if (cur.element.equals(element)) {
+            if (Objects.equals(cur.element, element)) {
                 return index;
             }
             cur = cur.next;
@@ -136,7 +135,7 @@ public class LinkedList<E> implements List<E>, Queue<E> {
     
     @Override
     public Iterator<E> iterator() {
-        return new LinkedListIterator<>(head);
+        return new LinkedListIterator<>(this, head);
     }
     
     @Override
@@ -144,8 +143,7 @@ public class LinkedList<E> implements List<E>, Queue<E> {
         Node<E> cur = tail;
         int index = size - 1;
         while (cur != null) {
-            if ((cur.element == null && element == null)
-                || (cur.element != null && cur.element.equals(element))) {
+            if (Objects.equals(cur.element, element)) {
                 return index;
             }
             cur = cur.prev;
@@ -183,11 +181,10 @@ public class LinkedList<E> implements List<E>, Queue<E> {
     }
 
     @Override
-    public boolean remove(Object o) {
+    public boolean remove(Object item) {
         Node<E> cur = head;
         while (cur != null) {
-            if ((cur.element == null && o == null)
-                || (cur.element != null && cur.element.equals(o))) {
+            if (Objects.equals(cur.element, item)) {
                 removeNode(cur);
                 return true;
             }
@@ -243,7 +240,7 @@ public class LinkedList<E> implements List<E>, Queue<E> {
         return hasChanged;
     }
     
-    private void removeNode(Node<E> node) {
+    void removeNode(Node<E> node) {
         if (node.prev != null) {
             node.prev.next = node.next;
         }

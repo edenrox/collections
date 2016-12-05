@@ -2,6 +2,8 @@ package com.hopkins.collections;
 
 public class Arrays {
     
+    private Arrays() { }
+    
     public static final <T> List<T> asList(T... elements) {
         return new FixedSizeList<>(elements);
     }

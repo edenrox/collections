@@ -37,11 +37,9 @@ public class ArrayList<E> implements List<E>, RandomAccess {
 
     @Override
     public void add(int index, E element) {
-        if (index < 0 || index > size) {
-            throw new IndexOutOfBoundsException();
-        }
+        RandomAccessListHelper.checkIndex(index, size + 1);
         ensureCapacity(size+1);
-        System.arraycopy(data, index, data, index+1, size - index);
+        System.arraycopy(data, index, data, index + 1, size - index);
         data[index] = element;
         size++;
     }
@@ -58,6 +56,7 @@ public class ArrayList<E> implements List<E>, RandomAccess {
     
     @Override
     public boolean addAll(int index, Collection<? extends E> c) {
+        RandomAccessListHelper.checkIndex(index, size + 1);
         ensureCapacity(size + c.size());
         System.arraycopy(data, index, data, index + c.size(), size - index);
         Iterator<? extends E> iter = c.iterator();
@@ -107,9 +106,7 @@ public class ArrayList<E> implements List<E>, RandomAccess {
 
     @Override
     public E get(int index) {
-        if (index >= size) {
-            throw new IndexOutOfBoundsException();
-        }
+        RandomAccessListHelper.checkIndex(index, size);
         return (E) data[index];
     }
 
@@ -145,9 +142,7 @@ public class ArrayList<E> implements List<E>, RandomAccess {
 
     @Override
     public E remove(int index) {
-        if (index < 0 || index >= size) {
-            throw new IndexOutOfBoundsException();
-        }
+        RandomAccessListHelper.checkIndex(index, size);
         Object removed = data[index];
         System.arraycopy(data, index + 1, data, index, size - index);
         size--;
@@ -190,9 +185,7 @@ public class ArrayList<E> implements List<E>, RandomAccess {
 
     @Override
     public E set(int index, E element) {
-        if (index < 0 || index >= size) {
-            throw new IndexOutOfBoundsException();
-        }
+        RandomAccessListHelper.checkIndex(index, size);
         Object item = data[index];
         data[index] = element;
         return (E) item;

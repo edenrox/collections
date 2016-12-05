@@ -72,7 +72,7 @@ final class FixedSizeList<T> implements List<T>, RandomAccess {
     
     @Override
     public boolean isEmpty() {
-        return data.length != 0;
+        return data.length == 0;
     }
 
     @Override
@@ -82,7 +82,7 @@ final class FixedSizeList<T> implements List<T>, RandomAccess {
 
     @Override
     public int lastIndexOf(Object o) {
-        for (int i = data.length - 1; i >= 0; i++) {
+        for (int i = data.length - 1; i >= 0; i--) {
             if (Objects.equals(data[i], o)) {
                 return i;
             }
@@ -137,5 +137,16 @@ final class FixedSizeList<T> implements List<T>, RandomAccess {
             a[data.length] = null;
         }
         return a;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("List {size")
+                .append(size())
+                .append(", elements: ")
+                .append(Arrays.toString(data))
+                .append("}");
+        return sb.toString();
     }
 }
