@@ -7,15 +7,18 @@ public class TreeMap<K, V> implements Map<K, V> {
     private int size;
     
     public TreeMap() {
-        this.comparator = null;
+        this.comparator = ComparableComparator.INSTANCE;
     }
     
     public TreeMap(Comparator<K> comparator) {
+        if (comparator == null) {
+            throw new NullPointerException();
+        }
         this.comparator = comparator;
     }
     
     public TreeMap(Map<? extends K, ? extends V> map) {
-        this.comparator = null;
+        this.comparator = ComparableComparator.INSTANCE;
         putAll(map);
     }
 
@@ -94,11 +97,7 @@ public class TreeMap<K, V> implements Map<K, V> {
                 // TODO(ianhopkins): split the leaf node
                 LeafTreeNode<K, V> newNode = new LeafTreeNode<>(key, value);
                 if (node.parent == null) {
-                    InnerTreeNode<K> newRoot = new InnerTreeNode<>();
-                    newRoot.left = node;
-                    newRoot.leftPivot = newNode.key;
-                    newRoot.middle = newNode;
-                    root = newRoot;
+                    
                 } else {
                     
                 }
@@ -108,9 +107,34 @@ public class TreeMap<K, V> implements Map<K, V> {
         }
     }
     
-    private void addToNode(TreeNode<K, V> parentNode, TreeNode<K, V> toAdd) {
-        if (parentNode == null) {
-            
+    private void addToNode(TreeNode<K> destNode, TreeNode<K> newNode) {
+        TreeNode<K> parent = destNode.getParent();
+        if (destNode.isLeafNode()) {
+            if (parent == null) {
+                // The destNode is the only node in the tree, make a new root
+                InnerTreeNode<K> newRoot = new InnerTreeNode<>();
+                newRoot.left = destNode;
+                newRoot.leftPivot = ((LeafTreeNode<K, V>) newNode).key;
+                newRoot.middle = newNode;
+                root = newRoot;
+            } else {
+                // Add the new node to the parent
+                addToNode(parent, newNode);
+            }
+        } else {
+            InnerTreeNode<K> innerNode = (InnerTreeNode<K>) destNode;
+            if (innerNode.right == null) {
+                // the destNode has room
+            } else if (innerNode.parent == null) {
+                // the destNode is the root, make a new root
+                InnerTreeNode<K> newRoot = new InnerTreeNode<>();
+                InnerTreeNode<K> newRightNode = new InnerTreeNode<>();
+                newRoot.left = innerNode;
+                newRoot.leftPivot = innerNode.rightPivot;
+                newRoot.right = newRightNode;
+                
+                newRightNode.left = innerNode.right;
+            }
         }
     }
 
