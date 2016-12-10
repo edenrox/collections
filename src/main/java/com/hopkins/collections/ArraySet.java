@@ -7,10 +7,15 @@ public class ArraySet<T> implements Set<T> {
     
     private final ArrayList<T> list;
     
+    /** Creates a new empty {@lilnk ArraySet}. */
     public ArraySet() {
         list = new ArrayList<>();
     }
     
+    /** 
+     * Creates a new {@link ArraySet} containing the elements of the specified 
+     * {@link Collection}. 
+     */
     public ArraySet(Collection<? extends T> c) {
         list = new ArrayList<>();
         addAll(c);

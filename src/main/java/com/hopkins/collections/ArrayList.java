@@ -3,7 +3,10 @@ package com.hopkins.collections;
 import java.lang.reflect.Array;
 import java.util.Objects;
 
-/** A {@link List} implementation backed by an array that resizes as needed. */
+/** 
+ * An implementation of a {@link List} backed by an array that is resized 
+ * needed.
+ */
 public class ArrayList<E> implements List<E>, RandomAccess {
     private static final int DEFAULT_CAPACITY = 10;
 
