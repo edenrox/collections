@@ -1,7 +1,12 @@
 package com.hopkins.collections;
 
+import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
+
 /** A {@link Map} implemented with a 2-3 tree. */
 public class TreeMap<K, V> implements Map<K, V> {
+    private static final AtomicInteger NEXT_NODE_ID = new AtomicInteger();
+    
     private final Comparator<K> comparator;
     private TreeNode root;
     private int size;
@@ -39,12 +44,30 @@ public class TreeMap<K, V> implements Map<K, V> {
 
     @Override
     public boolean containsValue(Object value) {
-        return values().contains(value);
+        return containsValue(root, value);
+    }
+    
+    private boolean containsValue(TreeNode<K> node, Object value) {
+        if (node == null) {
+            return false;
+        } else if (node.isLeafNode()) {
+            LeafTreeNode<K, V> leaf = (LeafTreeNode<K, V>) node;
+            return Objects.equals(leaf.value, value);
+        } else {
+            InnerTreeNode<K> inner = (InnerTreeNode<K>) node;
+            if (containsValue(inner.left, value)) {
+                return true;
+            }
+            if (containsValue(inner.middle, value)) {
+                return true;
+            }
+            return containsValue(inner.right, value);
+        }
     }
 
     @Override
     public Set<Entry<K, V>> entrySet() {
-        
+        return null;
     }
     
     private LeafTreeNode<K, V> findNode(TreeNode<K> node, K key) {
@@ -52,10 +75,10 @@ public class TreeMap<K, V> implements Map<K, V> {
             return (LeafTreeNode<K, V>) node;
         } else {
             InnerTreeNode<K> innerNode = (InnerTreeNode<K>) node;
-            if (comparator.compare(innerNode.leftPivot, key) < 0) {
+            if (comparator.compare(key, innerNode.leftPivot) < 0) {
                 return findNode(innerNode.left, key);
             } else if (innerNode.rightPivot == null 
-                    || comparator.compare(innerNode.rightPivot, key) < 0) {
+                    || comparator.compare(key , innerNode.rightPivot) < 0) {
                 return findNode(innerNode.middle, key);
             } else {
                 return findNode(innerNode.right, key);
@@ -79,31 +102,31 @@ public class TreeMap<K, V> implements Map<K, V> {
 
     @Override
     public Set<K> keySet() {
-        
+        return null;
     }
 
     @Override
     public V put(K key, V value) {
+        if (key == null) {
+            throw new NullPointerException();
+        }
         if (root == null) {
-            root = new LeafTreeNode(key, value);
+            // New root node
+            root = new LeafTreeNode<>(key, value);
+            size++;
             return null;
+        }
+        LeafTreeNode<K, V> node = findNode(root, key);
+        if (node.key.equals(key)) {
+            // Replace an existing value
+            V oldValue = node.value;
+            node.value = value;
+            return oldValue;
         } else {
-            LeafTreeNode<K, V> node = findNode(root, key);
-            if (node.key.equals(key)) {
-                V oldValue = node.value;
-                node.value = value;
-                return oldValue;
-            } else {
-                // TODO(ianhopkins): split the leaf node
-                LeafTreeNode<K, V> newNode = new LeafTreeNode<>(key, value);
-                if (node.parent == null) {
-                    
-                } else {
-                    
-                }
-                
-                return null;
-            }
+            // Add a new node
+            addToNode(node, new LeafTreeNode<>(key, value));
+            size++;
+            return null;
         }
     }
     
@@ -111,51 +134,126 @@ public class TreeMap<K, V> implements Map<K, V> {
         TreeNode<K> parent = destNode.getParent();
         if (destNode.isLeafNode()) {
             if (parent == null) {
-                // The destNode is the only node in the tree, make a new root
-                InnerTreeNode<K> newRoot = new InnerTreeNode<>();
-                newRoot.left = destNode;
-                newRoot.leftPivot = ((LeafTreeNode<K, V>) newNode).key;
-                newRoot.middle = newNode;
-                root = newRoot;
+                makeNewRoot(destNode, newNode);
             } else {
-                // Add the new node to the parent
                 addToNode(parent, newNode);
             }
         } else {
             InnerTreeNode<K> innerNode = (InnerTreeNode<K>) destNode;
             if (innerNode.right == null) {
                 // the destNode has room
-            } else if (innerNode.parent == null) {
-                // the destNode is the root, make a new root
-                InnerTreeNode<K> newRoot = new InnerTreeNode<>();
-                InnerTreeNode<K> newRightNode = new InnerTreeNode<>();
-                newRoot.left = innerNode;
-                newRoot.leftPivot = innerNode.rightPivot;
-                newRoot.right = newRightNode;
+                K max = getMaximum(newNode);
+                if (comparator.compare(max, innerNode.leftPivot) < 0) {
+                    innerNode.right = innerNode.middle;
+                    innerNode.rightPivot = innerNode.leftPivot;
+                    innerNode.middle = innerNode.left;
+                    innerNode.leftPivot = max;
+                    innerNode.left = newNode;
+                } else if (comparator.compare(max, getMaximum(innerNode.middle)) < 0) {
+                    innerNode.right = innerNode.middle;
+                    innerNode.rightPivot = max;
+                    innerNode.middle = newNode;
+                } else {
+                    innerNode.right = newNode;
+                    innerNode.rightPivot = getMaximum(innerNode.middle);
+                }
+                newNode.setParent(innerNode);
+            } else {
+                // Split the node into two
+                InnerTreeNode<K> splitNode = new InnerTreeNode<>();
+                if (comparator.compare(getMaximum(newNode), innerNode.leftPivot) < 0) {
+                    splitNode.left = newNode;
+                    splitNode.leftPivot = getMaximum(newNode);
+                    splitNode.right = innerNode.left;
+                    
+                    innerNode.left = innerNode.middle;
+                    innerNode.leftPivot = innerNode.rightPivot;
+                    innerNode.middle = innerNode.right;
+                    innerNode.rightPivot = null;
+                    innerNode.right = null;
+                }
                 
-                newRightNode.left = innerNode.right;
+            }
+        }
+    }
+    
+    private void makeNewRoot(TreeNode<K> a, TreeNode<K> b) {
+        // The destNode is the root, make a new root
+        InnerTreeNode<K> newRoot = new InnerTreeNode<>();
+        if (comparator.compare(getMaximum(a), getMaximum(b)) < 0) {
+            newRoot.left = a;
+            newRoot.leftPivot = getMaximum(a);
+            newRoot.middle = b;
+        } else {
+            newRoot.left = b;
+            newRoot.leftPivot = getMaximum(b);
+            newRoot.middle = a;
+        }
+        a.setParent(newRoot);
+        b.setParent(newRoot);
+        root = newRoot;
+    }
+        
+    private K getMaximum(TreeNode<K> node) {
+        if (node.isLeafNode()) {
+            LeafTreeNode<K, V> leaf = (LeafTreeNode<K, V>) node;
+            return leaf.key;
+        } else {
+            InnerTreeNode<K> inner = (InnerTreeNode<K>) node;
+            if (inner.right == null) {
+                return getMaximum(inner.middle);
+            } else {
+                return getMaximum(inner.right);
             }
         }
     }
 
     @Override
     public void putAll(Map<? extends K, ? extends V> map) {
-        Iterator<Map.Entry<K, V>> iter = map.entrySet().iterator();
-        while (iter.hasNext()) {
-            Map.Entry<? extends K, ? extends V> entry = iter.next();
-            put(entry.getKey(), entry.getValue());
-        }
+        
     }
 
     @Override
     public V remove(Object key) {
+        if (root == null) {
+            // Tree is empty
+            return null;
+        }
         LeafTreeNode<K, V> node = findNode(root, (K) key);
-        if (node == null) {
+        if (!node.key.equals(key)) {
+            // key not found in Tree
             return null;
         } else {
-            V oldValue
+            removeNode(node);
+            size--;
+            return node.value;
         }
-        
+    }
+    
+    private void removeNode(TreeNode<K> node) {
+        InnerTreeNode<K> parent = node.getParent();
+        if (parent == null) {
+            // removing the root
+            root = null;
+        } else if (parent.right != null) {
+            // we can just remove the child from this node directly
+            if (parent.left == node) {
+                parent.left = parent.middle;
+                parent.leftPivot = parent.rightPivot;
+                parent.middle = parent.right;
+                parent.rightPivot = null;
+                parent.right = null;
+            } else if (parent.middle == node) {
+                parent.middle = parent.right;
+                parent.rightPivot = null;
+                parent.right = null;
+            } else {
+                parent.right = null;
+                parent.rightPivot = null;
+            }
+        } else {
+            
+        }
     }
 
     @Override
@@ -165,16 +263,54 @@ public class TreeMap<K, V> implements Map<K, V> {
 
     @Override
     public Collection<V> values() {
+        return null;
+    }
+    
+    String debugString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("TreeMap {size: ")
+                .append(size)
+                .append("}\n  ");
+        if (root == null) {
+            sb.append("null");
+        } else {
+            LinkedList<TreeNode<K>> nodeList = new LinkedList<>();
+            nodeList.add(root);
+            nodeList.add(null);
+            while (!nodeList.isEmpty()) {
+                TreeNode<K> node = nodeList.removeFirst();
+                if (node == null) {
+                    sb.append("\n  ");
+                    if (!nodeList.isEmpty()) {
+                        nodeList.add(null);
+                    }
+                } else {
+                    sb.append(node.debugString());
+                    if (!node.isLeafNode()) {
+                        InnerTreeNode<K> inner = (InnerTreeNode<K>) node;
+                        nodeList.add(inner.left);
+                        nodeList.add(inner.middle);
+                        if (inner.right != null) {
+                            nodeList.add(inner.right);
+                        }
+                    }
+                }
+            }
+        }
         
+        return sb.toString();
     }
     
     interface TreeNode<K> {
+        int getId();
         InnerTreeNode<K> getParent();
+        void setParent(InnerTreeNode<K> parent);
         boolean isLeafNode();
+        String debugString();
     }
     
     static final class InnerTreeNode<K> implements TreeNode {
-        
+        int id;
         InnerTreeNode<K> parent;
         TreeNode<K> left;
         K leftPivot;
@@ -182,18 +318,46 @@ public class TreeMap<K, V> implements Map<K, V> {
         K rightPivot;
         TreeNode<K> right;
         
+        public InnerTreeNode() {
+            this.id = NEXT_NODE_ID.getAndIncrement();
+        }
+        
+        @Override
+        public int getId() {
+            return id;
+        }
+        
         @Override
         public InnerTreeNode<K> getParent() {
             return parent;
         }
 
         @Override
+        public void setParent(InnerTreeNode parent) {
+            this.parent = parent;
+        }        
+
+        @Override
         public boolean isLeafNode() {
             return false;
+        }
+        
+        @Override
+        public String debugString() {
+            return "Inner {"
+                    + "id: " + id
+                    + ", parent id: " + getNodeId(parent)
+                    + ", left: " + getNodeId(left)
+                    + ", leftPivot: " + leftPivot 
+                    + ", middle: " + getNodeId(middle)
+                    + ", rightPivot: " + rightPivot 
+                    + ", right: " + getNodeId(right)
+                    + "}";
         }
     }
     
     static final class LeafTreeNode<K,V> implements TreeNode {
+        int id;
         InnerTreeNode<K> parent;
         K key;
         V value;
@@ -202,9 +366,16 @@ public class TreeMap<K, V> implements Map<K, V> {
             if (key == null) {
                 throw new NullPointerException();
             }
+            this.id = NEXT_NODE_ID.getAndIncrement();
             this.key = key;
             this.value = value;
         }
+
+        @Override
+        public int getId() {
+            return id;
+        }
+        
 
         @Override
         public InnerTreeNode getParent() {
@@ -212,8 +383,23 @@ public class TreeMap<K, V> implements Map<K, V> {
         }
         
         @Override
+        public void setParent(InnerTreeNode parent) {
+            this.parent = parent;
+        }
+        
+        @Override
         public boolean isLeafNode() {
             return true;
+        }
+        
+        @Override
+        public String debugString() {
+            return "Leaf {"
+                    + "id: " + id 
+                    + ", parent id: " + getNodeId(parent)
+                    + ", key: " + key 
+                    + ", value: " + value 
+                    + '}';
         }
     }
     
@@ -241,6 +427,14 @@ public class TreeMap<K, V> implements Map<K, V> {
             V oldValue = this.value;
             this.value = value;
             return oldValue;
+        }
+    }
+    
+    private static String getNodeId(TreeNode<?> node) {
+        if (node == null) {
+            return null;
+        } else {
+            return String.valueOf(node.getId());
         }
     }
 }
