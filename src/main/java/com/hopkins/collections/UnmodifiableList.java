@@ -1,12 +1,16 @@
 package com.hopkins.collections;
 
-/**
- * Wraps a {@link List} making it non-modifiable.
+/** 
+ * An implementation of {@link List} that wraps an underlying {@link List} and
+ * does not allow modification.
  */
 final class UnmodifiableList<E> implements List<E> {
     private final List<E> list;
     
     UnmodifiableList(List<E> list) {
+        if (list == null) {
+            throw new NullPointerException();
+        }
         this.list = list;
     }
     
@@ -62,7 +66,7 @@ final class UnmodifiableList<E> implements List<E> {
 
     @Override
     public Iterator<E> iterator() {
-        return new RandomAccessListIterator<>(this);
+        return new UnmodifiableIterator(list.iterator());
     }
 
     @Override
