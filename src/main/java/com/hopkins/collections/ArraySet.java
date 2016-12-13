@@ -91,7 +91,7 @@ public class ArraySet<T> implements Set<T> {
     }
 
     @Override
-    public <T> T[] toArray(T[] a) {
+    public T[] toArray(T[] a) {
         return list.toArray(a);
     }
 }

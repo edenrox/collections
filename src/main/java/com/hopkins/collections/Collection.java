@@ -47,5 +47,5 @@ public interface Collection<T> {
     Object[] toArray();
     
     /** Returns an array containing all the items in this collection. */
-    <T> T[] toArray(T[] a);
+    T[] toArray(T[] a);
 }

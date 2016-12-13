@@ -66,7 +66,7 @@ final class EmptySet<T> implements Set<T> {
     }
 
     @Override
-    public <T> T[] toArray(T[] a) {
+    public T[] toArray(T[] a) {
         if (a.length > 0) {
             a[0] = null;
         }

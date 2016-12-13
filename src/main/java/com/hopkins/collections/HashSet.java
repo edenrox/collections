@@ -120,7 +120,7 @@ public class HashSet<T> implements Set<T> {
     }
 
     @Override
-    public <T> T[] toArray(T[] a) {
+    public T[] toArray(T[] a) {
         if (a.length < size()) {
             a = (T[]) Array.newInstance(a.getClass().getComponentType(), size());
         }

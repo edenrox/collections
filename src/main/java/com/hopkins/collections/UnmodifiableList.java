@@ -66,7 +66,12 @@ final class UnmodifiableList<E> implements List<E> {
 
     @Override
     public Iterator<E> iterator() {
-        return new UnmodifiableIterator(list.iterator());
+        return listIterator();
+    }
+
+    @Override
+    public ListIterator<E> listIterator() {
+        return new UnmodifiableListIterator(list.listIterator());
     }
 
     @Override
@@ -110,7 +115,7 @@ final class UnmodifiableList<E> implements List<E> {
     }
 
     @Override
-    public <T> T[] toArray(T[] a) {
+    public E[] toArray(E[] a) {
         return list.toArray(a);
     }
 }

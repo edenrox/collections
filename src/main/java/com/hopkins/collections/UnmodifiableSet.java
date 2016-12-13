@@ -75,7 +75,7 @@ final class UnmodifiableSet<T> implements Set<T> {
     }
 
     @Override
-    public <T> T[] toArray(T[] a) {
+    public T[] toArray(T[] a) {
         return set.toArray(a);
     }
 }

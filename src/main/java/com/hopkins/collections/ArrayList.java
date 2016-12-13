@@ -130,6 +130,11 @@ public class ArrayList<E> implements List<E>, RandomAccess {
     
     @Override
     public Iterator<E> iterator() {
+        return listIterator();
+    }
+
+    @Override
+    public ListIterator<E> listIterator() {
         return new RandomAccessListIterator<>(this);
     }
 
@@ -207,9 +212,9 @@ public class ArrayList<E> implements List<E>, RandomAccess {
     }
     
     @Override
-    public <T> T[] toArray(T[] a) {
+    public E[] toArray(E[] a) {
         if (a.length < size) {
-            a = (T[]) Array.newInstance(a.getClass().getComponentType(), size);
+            a = (E[]) Array.newInstance(a.getClass().getComponentType(), size);
         }
         System.arraycopy(data, 0, a, 0, size);
         if (a.length > size) {

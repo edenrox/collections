@@ -135,6 +135,11 @@ public class LinkedList<E> implements List<E>, Queue<E> {
     
     @Override
     public Iterator<E> iterator() {
+        return listIterator();
+    }
+
+    @Override
+    public ListIterator<E> listIterator() {
         return new LinkedListIterator<>(this, head);
     }
     
@@ -299,14 +304,14 @@ public class LinkedList<E> implements List<E>, Queue<E> {
     }
     
     @Override
-    public <T> T[] toArray(T[] a) {
+    public E[] toArray(E[] a) {
         if (a.length < size) {
-            a = (T[]) Array.newInstance(a.getClass().getComponentType(), size);
+            a = (E[]) Array.newInstance(a.getClass().getComponentType(), size);
         }
         Node<E> cur = head;
         int index = 0;
         while (cur != null) {
-            a[index] = (T) cur.element;
+            a[index] = (E) cur.element;
             cur = cur.next;
             index++;
         }

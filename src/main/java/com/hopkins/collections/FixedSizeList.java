@@ -84,6 +84,11 @@ final class FixedSizeList<T> implements List<T>, RandomAccess {
 
     @Override
     public Iterator<T> iterator() {
+        return listIterator();
+    }
+
+    @Override
+    public ListIterator<T> listIterator() {
         return new RandomAccessListIterator<>(this);
     }
 
@@ -135,7 +140,7 @@ final class FixedSizeList<T> implements List<T>, RandomAccess {
     }
 
     @Override
-    public <T> T[] toArray(T[] a) {
+    public T[] toArray(T[] a) {
         if (a.length < data.length) {
             a = (T[]) Array.newInstance(a.getClass().getComponentType(), data.length);
         }

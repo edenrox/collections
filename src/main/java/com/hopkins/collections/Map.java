@@ -10,7 +10,7 @@ public interface Map<K,V> {
     /** Returns {@code true} if the Map contains the specified value. */
     boolean containsValue(Object value);
     
-    Set<Map.Entry<K,V>> entrySet();
+    Set<Map.Entry<K, V>> entrySet();
     
     V get(Object key);
     
