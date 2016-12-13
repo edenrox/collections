@@ -75,10 +75,10 @@ public class TreeMap<K, V> implements Map<K, V> {
             return (LeafTreeNode<K, V>) node;
         } else {
             InnerTreeNode<K> innerNode = (InnerTreeNode<K>) node;
-            if (comparator.compare(key, innerNode.leftPivot) < 0) {
+            if (comparator.compare(key, innerNode.leftPivot) <= 0) {
                 return findNode(innerNode.left, key);
             } else if (innerNode.rightPivot == null 
-                    || comparator.compare(key , innerNode.rightPivot) < 0) {
+                    || comparator.compare(key , innerNode.rightPivot) <= 0) {
                 return findNode(innerNode.middle, key);
             } else {
                 return findNode(innerNode.right, key);
@@ -210,7 +210,12 @@ public class TreeMap<K, V> implements Map<K, V> {
 
     @Override
     public void putAll(Map<? extends K, ? extends V> map) {
-        
+        Iterator<?> iter = map.entrySet().iterator();
+        while (iter.hasNext()) {
+            Map.Entry<? extends K, ? extends V> entry = 
+                    (Map.Entry<? extends K, ? extends V>) iter.next();
+            put(entry.getKey(), entry.getValue());
+        }
     }
 
     @Override

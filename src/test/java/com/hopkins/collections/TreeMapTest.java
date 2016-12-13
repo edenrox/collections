@@ -37,6 +37,24 @@ public class TreeMapTest {
     }
     
     @Test
+    public void put_remove() {
+        assertThat(map.remove("one")).isNull();
+        
+        map.put("one", 1);
+        
+        assertThat(map.remove("two")).isNull();
+        assertThat(map.remove("one")).isEqualTo(1);
+        assertThat(map.isEmpty()).isTrue();
+        
+        map.put("a", 1);
+        map.put("b", 2);
+        map.put("c", 3);
+        int value = map.remove("a");
+        assertThat(value).isEqualTo(1);
+        assertThat(map.size()).isEqualTo(2);
+    }
+    
+    @Test
     public void containsKey() {
         assertThat(map.containsKey("one")).isFalse();
         
