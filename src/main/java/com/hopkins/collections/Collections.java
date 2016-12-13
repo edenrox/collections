@@ -10,7 +10,7 @@ public final class Collections {
     private static final Comparator REVERSE_COMPARATOR = 
             new ReverseComparator(ComparableComparator.INSTANCE);
     
-    public static final <T> boolean addAll(Collection<? super T> c, T... elements) {
+    public static <T> boolean addAll(Collection<? super T> c, T... elements) {
         boolean success = true;
         for (T item : elements) {
             success = success && c.add(item);
@@ -18,21 +18,27 @@ public final class Collections {
         return success;
     }
     
+    public static <T> void copy(List<? super T> dest, List<? extends T> src) {
+        for (int i = 0; i < src.size(); i++) {
+            dest.set(i, src.get(i));
+        }
+    }
+    
     /** Returns a non-modifiable {@link Iterator} which is empty. */
-    public static final <T> Iterator<T> emptyIterator() {
+    public static <T> Iterator<T> emptyIterator() {
         return (Iterator<T>) EMPTY_ITERATOR;
     }
     
     /** Returns a non-modifiable {@link List} which is empty. */
-    public static final <T> List<T> emptyList() {
+    public static <T> List<T> emptyList() {
         return (List<T>) EMPTY_LIST;
     }
     
-    public static final <K, V> Map<K, V> emptyMap() {
+    public static <K, V> Map<K, V> emptyMap() {
         return (Map<K, V>) EMPTY_MAP;
     }
     
-    public static final <T> Set<T> emptySet() {
+    public static <T> Set<T> emptySet() {
         return (Set<T>) EMPTY_SET;
     }
     
@@ -67,6 +73,12 @@ public final class Collections {
      */
     public static <T> List<T> singletonList(T item) {
         return unmodifiableList(FixedSizeList.singletonList(item));
+    }
+    
+    public static <T> Set<T> singleton(T item) {
+        Set<T> set = new ArraySet<>();
+        set.add(item);
+        return unmodifiableSet(set);
     }
     
     public static <T extends Comparable<? super T>> void sort(List<T> list) {
