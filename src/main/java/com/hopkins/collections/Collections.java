@@ -68,6 +68,30 @@ public final class Collections {
         return new ReverseComparator<>(comparator);
     }
     
+    public static <T> T max(Collection<T> c) {
+        return max(c, (Comparator<T>) ComparableComparator.INSTANCE);
+    }
+    
+    public static <T> T max(Collection<T> c, Comparator<T> comparator) {
+        T max = null;
+        Iterator<T> iter = c.iterator();
+        while (iter.hasNext()) {
+            T item = iter.next();
+            if (max == null || comparator.compare(max, item) < 0) {
+                max = item;
+            }
+        }
+        return max;
+    }
+    
+    public static <T> T min(Collection<T> c) {
+        return min(c, (Comparator<T>) ComparableComparator.INSTANCE);
+    }
+    
+    public static <T> T min(Collection<T> c, Comparator<T> comparator) {
+        return max(c, reverseOrder(comparator));
+    }
+    
     /** 
      * Returns a non-modifiable {@link List} containing only the specified item. 
      */
