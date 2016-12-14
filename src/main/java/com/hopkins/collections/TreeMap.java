@@ -8,7 +8,14 @@ public class TreeMap<K, V> implements Map<K, V> {
     private static final AtomicInteger NEXT_NODE_ID = new AtomicInteger();
     
     private final Comparator<K> comparator;
-    private TreeNode root;
+    private final MapEntryIteratorFactory<K, V> iteratorFactory = new MapEntryIteratorFactory<K, V>() {
+        @Override
+        public Iterator<Entry<K, V>> newIterator() {
+            return new TreeMapEntryIterator<>(root);
+        }
+    };
+    
+    private TreeNode<K> root;
     private int size;
     
     public TreeMap() {
@@ -67,7 +74,7 @@ public class TreeMap<K, V> implements Map<K, V> {
 
     @Override
     public Set<Entry<K, V>> entrySet() {
-        return null;
+        return new MapEntrySet<>(this, iteratorFactory);
     }
     
     private LeafTreeNode<K, V> findNode(TreeNode<K> node, K key) {
@@ -102,7 +109,7 @@ public class TreeMap<K, V> implements Map<K, V> {
 
     @Override
     public Set<K> keySet() {
-        return null;
+        return new MapKeySet<>(this, iteratorFactory);
     }
 
     @Override
@@ -212,8 +219,7 @@ public class TreeMap<K, V> implements Map<K, V> {
     public void putAll(Map<? extends K, ? extends V> map) {
         Iterator<?> iter = map.entrySet().iterator();
         while (iter.hasNext()) {
-            Map.Entry<? extends K, ? extends V> entry = 
-                    (Map.Entry<? extends K, ? extends V>) iter.next();
+            Map.Entry<K, V> entry = (Map.Entry<K, V>) iter.next();
             put(entry.getKey(), entry.getValue());
         }
     }
@@ -268,7 +274,7 @@ public class TreeMap<K, V> implements Map<K, V> {
 
     @Override
     public Collection<V> values() {
-        return null;
+        return new MapValueCollection<>(this, iteratorFactory);
     }
     
     String debugString() {
@@ -361,7 +367,7 @@ public class TreeMap<K, V> implements Map<K, V> {
         }
     }
     
-    static final class LeafTreeNode<K,V> implements TreeNode {
+    static final class LeafTreeNode<K,V> implements TreeNode, Map.Entry<K, V> {
         int id;
         InnerTreeNode<K> parent;
         K key;
@@ -380,7 +386,23 @@ public class TreeMap<K, V> implements Map<K, V> {
         public int getId() {
             return id;
         }
-        
+
+        @Override
+        public K getKey() {
+            return key;
+        }
+
+        @Override
+        public V getValue() {
+            return value;
+        }
+
+        @Override
+        public V setValue(V value) {
+            V oldValue = this.value;
+            this.value = value;
+            return oldValue;
+        }
 
         @Override
         public InnerTreeNode getParent() {

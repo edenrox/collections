@@ -14,6 +14,21 @@ public class TreeMapTest {
     }
     
     @Test
+    public void init() {
+//        map.put("one", 1);
+//        map.put("two", 2);
+//        map.put("three", 3);
+//        
+//        TreeMap<String, Integer> map2 = new TreeMap<>(map);
+//        
+//        map.remove("one");
+//        
+//        assertThat(map2.size()).isEqualTo(3);
+//        assertThat(map2.containsKey("one")).isTrue();
+//        assertThat(map2.containsKey("three")).isTrue();
+    }
+    
+    @Test
     public void size() {
         assertThat(map.size()).isEqualTo(0);
         
@@ -67,6 +82,22 @@ public class TreeMapTest {
         
         assertThat(map.containsKey("two")).isTrue();
         assertThat(map.containsKey("five")).isFalse();
+    }
+    
+    @Test
+    public void containsValue() {
+        assertThat(map.containsValue(1)).isFalse();
+        
+        map.put("one", 1);
+        assertThat(map.containsValue(1)).isTrue();
+        assertThat(map.containsValue(2)).isFalse();
+        
+        map.put("two", 2);
+        map.put("three", 3);
+        
+        assertThat(map.containsValue(2)).isTrue();
+        assertThat(map.containsValue(3)).isTrue();
+        assertThat(map.containsValue(5)).isFalse();
     }
     
     @Test

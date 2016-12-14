@@ -14,6 +14,22 @@ public class HashMapTest {
     }
     
     @Test
+    public void init_withMap() {
+        map.put("one", 1);
+        map.put("two", 2);
+        map.put("three", 3);
+        map.put("four", 4);
+        
+        HashMap<String, Integer> map2 = new HashMap<>(map);
+        map.remove("one");
+        
+        assertThat(map2.containsKey("one")).isTrue();
+        assertThat(map2.containsKey("three")).isTrue();
+        assertThat(map2.containsKey("five")).isFalse();
+        assertThat(map2.get("two")).isEqualTo(2);
+    }
+    
+    @Test
     public void size_afterInit() {
         assertThat(map.size()).isEqualTo(0);
     }
@@ -148,5 +164,29 @@ public class HashMapTest {
         assertThat(map.size()).isEqualTo(3);
         assertThat(map.get("one")).isEqualTo(1);
         assertThat(map.get("two")).isEqualTo(2);
+    }
+    
+    @Test
+    public void keySet_containsKey() {
+        map = new HashMap<>(2 /* initialCapacity */);
+        map.put("one", 1);
+        map.put("two", 2);
+        map.put("three", 2);
+        
+        assertThat(map.keySet().contains("one")).isTrue();
+        assertThat(map.keySet().contains("bobert")).isFalse();
+        assertThat(map.keySet().contains("two")).isTrue();
+        assertThat(map.keySet().containsAll(Arrays.asList("one", "two", "three"))).isTrue();
+        assertThat(map.keySet().containsAll(Arrays.asList("one", "butter"))).isFalse();
+    }
+    
+    @Test
+    public void values_toArray() {
+        map = new HashMap<>(2 /* initialCapacity */);
+        map.put("one", 1);
+        map.put("two", 2);
+        map.put("three", 3);
+        
+        assertThat(map.values().toArray()).asList().containsExactly(1, 2, 3);
     }
 }

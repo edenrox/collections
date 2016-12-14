@@ -7,6 +7,12 @@ public class HashMap<K, V> implements Map<K, V> {
     private static final float DEFAULT_LOAD_FACTOR = 0.75f;
     
     private final float loadFactor;
+    private final MapEntryIteratorFactory<K, V> iteratorFactory = new MapEntryIteratorFactory<K, V>() {
+        @Override
+        public Iterator<Map.Entry<K, V>> newIterator() {
+            return new HashMapEntryIterator(table);
+        }
+    };
     
     private HashMapEntry[] table;
     private int size;
@@ -46,7 +52,7 @@ public class HashMap<K, V> implements Map<K, V> {
 
     @Override
     public boolean containsKey(Object key) {
-        int position = Objects.hashCode(key) % table.length;
+        int position = (Objects.hashCode(key) & 0x7fffffff) % table.length;
         HashMapEntry<K, V> entry = table[position];
         while (entry != null) {
             if (Objects.equals(entry.key, key)) {
@@ -72,7 +78,7 @@ public class HashMap<K, V> implements Map<K, V> {
 
     @Override
     public Set<Entry<K, V>> entrySet() {
-        throw new UnsupportedOperationException();
+        return new MapEntrySet<>(this, iteratorFactory);
     }
 
     @Override
@@ -95,7 +101,7 @@ public class HashMap<K, V> implements Map<K, V> {
 
     @Override
     public Set<K> keySet() {
-        throw new UnsupportedOperationException();
+        return new MapKeySet<>(this, iteratorFactory);
     }
 
     @Override
@@ -127,7 +133,11 @@ public class HashMap<K, V> implements Map<K, V> {
     public void putAll(Map<? extends K, ? extends V> map) {
         ensureCapacity(size + map.size());
         
-        
+        Iterator<?> iter = map.entrySet().iterator();
+        while (iter.hasNext()) {
+            Map.Entry<K, V> entry = (Map.Entry<K, V>) iter.next();
+            put(entry.getKey(), entry.getValue());
+        }
     }
 
     @Override
@@ -158,7 +168,7 @@ public class HashMap<K, V> implements Map<K, V> {
 
     @Override
     public Collection<V> values() {
-        throw new UnsupportedOperationException();
+        return new MapValueCollection<>(this, iteratorFactory);
     }
     
     private void ensureCapacity(int newSize) {
