@@ -26,6 +26,41 @@ public class CollectionsTest {
     }
     
     @Test
+    public void emptyIterator() {
+        assertThat(Collections.emptyIterator().hasNext()).isFalse();
+    }
+    
+    @Test(expected = NoSuchElementException.class)
+    public void emptyIterator_next_throws() {
+        Collections.emptyIterator().next();
+    }
+    
+    @Test
+    public void emptySet() {
+        Set<String> emptySet = Collections.emptySet();
+        assertThat(emptySet.isEmpty()).isTrue();
+        assertThat(emptySet.size()).isEqualTo(0);
+        assertThat(emptySet.contains("a")).isFalse();
+        assertThat(emptySet.containsAll(Arrays.asList("a", "b"))).isFalse();
+        assertThat(emptySet.iterator().hasNext()).isFalse();
+        assertThat(emptySet.toArray()).hasLength(0);
+    }
+    
+    @Test
+    public void emptyMap() {
+        Map<String, Integer> emptyMap = Collections.emptyMap();
+        assertThat(emptyMap.isEmpty()).isTrue();
+        assertThat(emptyMap.size()).isEqualTo(0);
+        assertThat(emptyMap.containsKey("test")).isFalse();
+        assertThat(emptyMap.entrySet().isEmpty()).isTrue();
+        assertThat(emptyMap.keySet().isEmpty()).isTrue();
+        assertThat(emptyMap.values().isEmpty()).isTrue();
+        assertThat(emptyMap.get("test")).isNull();
+    }
+    
+    
+    
+    @Test
     public void fill_setsAllElements() {
         List<String> list = Arrays.asList("one", "two", "three", "four", "five");
         Collections.fill(list, "baba");
