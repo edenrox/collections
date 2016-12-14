@@ -1,7 +1,5 @@
 package com.hopkins.collections;
 
-import java.lang.reflect.Array;
-
 public class HashSet<T> implements Set<T> {
     private final HashMap<T, Object> map;
     
@@ -54,13 +52,7 @@ public class HashSet<T> implements Set<T> {
 
     @Override
     public boolean containsAll(Collection<?> c) {
-        Iterator<?> iter = c.iterator();
-        while (iter.hasNext()) {
-            if (!map.containsKey(iter.next())) {
-                return false;
-            }
-        }
-        return true;
+        return map.keySet().containsAll(c);
     }
 
     @Override
@@ -84,27 +76,12 @@ public class HashSet<T> implements Set<T> {
 
     @Override
     public boolean removeAll(Collection<?> c) {
-        Iterator<?> iter = c.iterator();
-        boolean isChanged = false;
-        while (iter.hasNext()) {
-            Object item = iter.next();
-            isChanged |= map.containsKey(item);
-            map.remove(item);
-        }
-        return isChanged;
+        return map.keySet().removeAll(c);
     }
 
     @Override
     public boolean retainAll(Collection<?> c) {
-        boolean isChanged = false;
-        Iterator<T> iter = iterator();
-        while (iter.hasNext()) {
-            if (!c.contains(iter.next())) {
-                iter.remove();
-                isChanged = true;
-            }
-        }
-        return isChanged;
+        return map.keySet().retainAll(c);
     }
 
     @Override
@@ -114,20 +91,11 @@ public class HashSet<T> implements Set<T> {
 
     @Override
     public Object[] toArray() {
-        Object[] a = new Object[size()];
-        
-        return a;
+        return map.keySet().toArray();
     }
 
     @Override
     public T[] toArray(T[] a) {
-        if (a.length < size()) {
-            a = (T[]) Array.newInstance(a.getClass().getComponentType(), size());
-        }
-        
-        if (a.length > size()) {
-            a[size()] = null;
-        }
-        return a;
+        return map.keySet().toArray(a);
     }
 }

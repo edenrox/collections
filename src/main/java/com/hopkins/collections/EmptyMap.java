@@ -62,6 +62,6 @@ final class EmptyMap<K, V> implements Map<K, V> {
 
     @Override
     public Collection<V> values() {
-        return Collections.EMPTY_SET;
+        return Collections.emptySet();
     }
 }
