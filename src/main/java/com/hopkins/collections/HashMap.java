@@ -17,24 +17,34 @@ public class HashMap<K, V> implements Map<K, V> {
     private HashMapEntry[] table;
     private int size;
     
+    /** Create a new HashMap with default initial capacity and load factor. */
     public HashMap() {
         this(DEFAULT_CAPACITY, DEFAULT_LOAD_FACTOR);
     }
     
+    /** 
+     * Create a new HashMap with the specified initial capacity and the default
+     * load factor. 
+     */
     public HashMap(int initialCapacity) {
         this(initialCapacity, DEFAULT_LOAD_FACTOR);
     }
     
+    /** 
+     * Create a new HashMap with the specified initial capacity and load factor. 
+     */
     public HashMap(int initialCapacity, float loadFactor) {
         this.table = new HashMapEntry[initialCapacity];
         this.loadFactor = loadFactor;
     }
     
+    /** Create a new HashMap with contents from the specified {@link Map}. */
     public HashMap(Map<? extends K, ? extends V> m) {
         this();
         putAll(m);
     }
     
+    /** Returns the capacity of the underlying array. */
     int capacity() {
         return table.length;
     }

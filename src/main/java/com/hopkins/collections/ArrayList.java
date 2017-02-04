@@ -25,6 +25,7 @@ public class ArrayList<E> implements List<E>, RandomAccess {
         data = new Object[capacity];
     }
     
+    /** Create a new array list with content from the specified collection. */
     public ArrayList(Collection<? extends E> c) {
         this(Math.max(DEFAULT_CAPACITY, c.size()));
         addAll(c);
@@ -51,9 +52,12 @@ public class ArrayList<E> implements List<E>, RandomAccess {
     public boolean addAll(Collection<? extends E> c) {
         ensureCapacity(size + c.size());
         Iterator<? extends E> iter = c.iterator();
+        int index = size;
         while (iter.hasNext()) {
-            add(iter.next());
+            data[index] = iter.next();
+            index++;
         }
+        size += c.size();
         return true;
     }
     
@@ -71,7 +75,8 @@ public class ArrayList<E> implements List<E>, RandomAccess {
         return true;
     }
     
-    protected int capacity() {
+    /** Returns the capacity of the underlying array. */
+    int capacity() {
         return data.length;
     }
 
