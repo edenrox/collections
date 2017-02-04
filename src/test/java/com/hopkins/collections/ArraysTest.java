@@ -86,4 +86,31 @@ public class ArraysTest {
         assertThat(list.lastIndexOf("two")).isEqualTo(-1);
         assertThat(list.lastIndexOf("zero")).isEqualTo(4);
     }
+    
+    @Test
+    public void copyOf_truncates() {
+        String[] array = new String[] {"a", "b","c"};
+        assertThat(Arrays.copyOf(array, 2)).asList()
+                .containsExactly("a", "b").inOrder();
+        
+        assertThat(Arrays.copyOf(array, 1)).asList()
+                .containsExactly("a").inOrder();
+    }
+    
+    @Test
+    public void copyOf_padsEnd() {
+        String[] array = new String[] {"a", "b","c"};
+        assertThat(Arrays.copyOf(array, 5)).asList()
+                .containsExactly("a", "b", "c", null, null).inOrder();
+    }
+    
+    @Test
+    public void copyOfRange() {
+        String[] array = new String[] {"a", "b","c"};
+        assertThat(Arrays.copyOfRange(array, 1, 3)).asList()
+                .containsExactly("b", "c").inOrder();
+        
+        assertThat(Arrays.copyOfRange(array, 2, 5)).asList()
+                .containsExactly("c", null, null).inOrder();
+    }
 }
