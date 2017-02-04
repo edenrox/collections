@@ -75,7 +75,7 @@ final class MapKeySet<T> implements Set<T> {
         while (iter.hasNext()) {
             Object item = iter.next();
             if (map.containsKey(item)) {
-                map.remove(iter.next());
+                map.remove(item);
                 isChanged = true;
             }
         }
