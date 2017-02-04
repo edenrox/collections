@@ -178,7 +178,9 @@ public class ArrayList<E> implements List<E>, RandomAccess {
         boolean hasChanged = false;
         Iterator<?> iter = items.iterator();
         while (iter.hasNext()) {
-            hasChanged = hasChanged || remove(iter.next());
+            if (remove(iter.next())) {
+                hasChanged = true;
+            }
         }
         return hasChanged;
     }
@@ -186,7 +188,7 @@ public class ArrayList<E> implements List<E>, RandomAccess {
     @Override
     public boolean retainAll(Collection<?> items) {
         boolean hasChanged = false;
-        for (int i = size - 1; size >= 0; i--) {
+        for (int i = size - 1; i >= 0; i--) {
             if (!items.contains(data[i])) {
                 remove(i);
                 hasChanged = true;
@@ -211,9 +213,7 @@ public class ArrayList<E> implements List<E>, RandomAccess {
 
     @Override
     public Object[] toArray() {
-        Object[] array = new Object[size];
-        System.arraycopy(data, 0, array, 0, size);
-        return array;
+        return Arrays.copyOf(data, size);
     }
     
     @Override
@@ -232,9 +232,7 @@ public class ArrayList<E> implements List<E>, RandomAccess {
         if (data.length == size) {
             return;
         }
-        Object[] newData = new Object[size];
-        System.arraycopy(data, 0, newData, 0, size);
-        data = newData;       
+        data = Arrays.copyOf(data, size);
     }
 
     @Override

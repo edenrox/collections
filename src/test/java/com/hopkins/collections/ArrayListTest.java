@@ -153,6 +153,12 @@ public class ArrayListTest {
         assertThat(list.lastIndexOf("one")).isEqualTo(3);
     }
     
+    @Test
+    public void lastIndexOf_notExist_returnsNotFound() {
+        list.addAll(Arrays.asList("a", "b", "c"));
+        assertThat(list.lastIndexOf("d")).isEqualTo(List.INDEX_NOT_FOUND);
+    }
+    
     @Test(expected = IndexOutOfBoundsException.class)
     public void remove_invalidIndex_throws() {
         list.remove(5);
@@ -204,6 +210,16 @@ public class ArrayListTest {
     }
     
     @Test
+    public void removeAll() {
+        list.addAll(Arrays.asList("a", "b", "c", "d"));
+        assertThat(list.removeAll(Arrays.asList("b", "c", "e"))).isTrue();
+        assertThat(list.size()).isEqualTo(2);
+        assertThat(list.containsAll(Arrays.asList("b", "c")));
+        
+        assertThat(list.removeAll(Arrays.asList("f", "g"))).isFalse();
+    }
+    
+    @Test
     public void toArray() {
         list.add("one");
         list.add("two");
@@ -246,5 +262,34 @@ public class ArrayListTest {
         assertThat(iter.next()).isEqualTo("two");
         assertThat(iter.next()).isEqualTo("three");
         assertThat(iter.hasNext()).isFalse();
+    }
+    
+    @Test
+    public void testTrimToSize() {
+        list.add("a");
+        list.trimToSize();
+        assertThat(list.capacity()).isEqualTo(1);
+    }
+    
+    @Test
+    public void ensureCapacity() {
+        list = new ArrayList(4 /* initialCapacity */);
+        assertThat(list.capacity()).isEqualTo(4);
+        
+        list.ensureCapacity(6);
+        assertThat(list.capacity()).isGreaterThan(5);
+        
+        list.ensureCapacity(20);
+        assertThat(list.capacity()).isEqualTo(20);
+    }
+    
+    @Test
+    public void testToString() {
+        list.addAll(Arrays.asList("one", "two", "three"));
+        list.trimToSize();
+        
+        assertThat(list.toString())
+                .isEqualTo("ArrayList {capacity: 3, size: 3, elements: "
+                        + "[one, two, three]}");
     }
 }
