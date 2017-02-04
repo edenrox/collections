@@ -66,4 +66,62 @@ public class ArraySetTest {
         assertThat(set.contains("two")).isTrue();
         assertThat(set.contains("three")).isFalse();
     }
+    
+    @Test
+    public void isEmpty() {
+        assertThat(set.isEmpty()).isTrue();
+        
+        set.add("one");
+        assertThat(set.isEmpty()).isFalse();
+    }
+    
+    @Test
+    public void clear() {
+        set.addAll(Arrays.asList("a", "b", "c"));
+        set.clear();
+        
+        assertThat(set.size()).isEqualTo(0);
+        assertThat(set.isEmpty()).isTrue();
+    }
+    
+    @Test
+    public void removeAll() {
+        set.addAll(Arrays.asList("a", "b", "c"));
+        
+        assertThat(set.removeAll(Arrays.asList("a", "q", "n"))).isTrue();
+        assertThat(set.size()).isEqualTo(2);
+    }
+    
+    @Test
+    public void retainAll() {
+        set.addAll(Arrays.asList("a", "b", "c", "d", "e", "f"));
+        
+        set.retainAll(Arrays.asList("b", "f", "g"));
+        
+        assertThat(set.size()).isEqualTo(2);
+        assertThat(set.containsAll(Arrays.asList("b", "f"))).isTrue();
+    }
+    
+    @Test
+    public void remove() {
+        set.addAll(Arrays.asList("a", "b", "c"));
+        
+        assertThat(set.remove("b")).isTrue();
+        assertThat(set.remove("b")).isFalse();
+        
+        assertThat(set.size()).isEqualTo(2);
+        assertThat(set.contains("b")).isFalse();
+    }
+    
+    @Test
+    public void toArray() {
+        set.addAll(Arrays.asList("a", "b", "c"));
+        
+        assertThat(set.toArray()).asList().containsExactly("a", "b", "c");
+        
+        String[] array = new String[] {"one", "two", "three", "four"};
+        set.toArray(array);
+        assertThat(array).asList().containsAllOf("a", "b", "c");
+        assertThat(array[3]).isNull();
+    }
 }
