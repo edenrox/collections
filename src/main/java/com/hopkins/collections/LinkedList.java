@@ -225,7 +225,9 @@ public class LinkedList<E> implements List<E>, Queue<E> {
         boolean hasChanged = false;
         Iterator<?> iter = c.iterator();
         while (iter.hasNext()) {
-            hasChanged = hasChanged || remove(iter.next());
+            if (remove(iter.next())) {
+                hasChanged = true;
+            }
         }
         return hasChanged;
     }
