@@ -58,8 +58,6 @@ public class CollectionsTest {
         assertThat(emptyMap.get("test")).isNull();
     }
     
-    
-    
     @Test
     public void fill_setsAllElements() {
         List<String> list = Arrays.asList("one", "two", "three", "four", "five");
@@ -87,5 +85,17 @@ public class CollectionsTest {
     @Test(expected = UnsupportedOperationException.class)
     public void singletonList_set_throws() {
         Collections.singletonList("test").set(0, "bob");
+    }
+    
+    @Test
+    public void swap() {
+        List<String> list = Arrays.asList("a", "b", "c", "d", "e");
+        
+        Collections.swap(list, 0, 0);
+        assertThat(list.get(0)).isEqualTo("a");
+        
+        Collections.swap(list, 0, 3);
+        assertThat(list.get(0)).isEqualTo("d");
+        assertThat(list.get(3)).isEqualTo("a");
     }
 }
