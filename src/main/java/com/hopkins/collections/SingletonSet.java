@@ -85,7 +85,7 @@ final class SingletonSet<T> implements Set<T> {
             a = (T[]) Array.newInstance(a.getClass().getComponentType(), 1);
         }
         a[0] = data;
-        if (a.length > 0) {
+        if (a.length > 1) {
             a[1] = null;
         }
         return a;
