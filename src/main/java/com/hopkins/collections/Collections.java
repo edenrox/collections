@@ -3,6 +3,7 @@ package com.hopkins.collections;
 import java.util.Objects;
 import java.util.Random;
 
+/** Utility class for working with {@link Collection}s. */
 public final class Collections {
     public static final List EMPTY_LIST = 
             unmodifiableList(new FixedSizeList<>(new Object[0]));

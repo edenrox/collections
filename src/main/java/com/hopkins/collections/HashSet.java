@@ -1,5 +1,6 @@
 package com.hopkins.collections;
 
+/** A {@link Set} which is backed by a {@link HashMap}. */
 public class HashSet<T> implements Set<T> {
     private final HashMap<T, Object> map;
     

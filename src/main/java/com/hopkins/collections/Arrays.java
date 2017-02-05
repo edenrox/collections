@@ -2,6 +2,7 @@ package com.hopkins.collections;
 
 import java.lang.reflect.Array;
 
+/** Utility class for working with arrays. */
 public class Arrays {
     
     private Arrays() { }

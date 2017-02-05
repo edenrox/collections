@@ -1,7 +1,7 @@
 package com.hopkins.collections;
 
 /** 
- * A {@link Comparator} that compares objects that implement {@link Comparable}.
+ * A {@link Comparator} for comparing objects that implement {@link Comparable}.
  */
 final class ComparableComparator<T extends Comparable<? super T>>
         implements Comparator<T> {

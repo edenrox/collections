@@ -2,6 +2,10 @@ package com.hopkins.collections;
 
 import java.util.Objects;
 
+/** 
+ * A {@link Map} that is backed by a hash table.  The hash table handles 
+ * collisions with separate chaining. 
+ */
 public class HashMap<K, V> implements Map<K, V> {
     private static final int DEFAULT_CAPACITY = 16;
     private static final float DEFAULT_LOAD_FACTOR = 0.75f;

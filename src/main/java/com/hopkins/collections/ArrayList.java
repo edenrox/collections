@@ -4,7 +4,7 @@ import java.lang.reflect.Array;
 import java.util.Objects;
 
 /** 
- * An implementation of a {@link List} backed by an array that is resized 
+ * An implementation of a {@link List} backed by an array that is resized as
  * needed.
  */
 public class ArrayList<E> implements List<E>, RandomAccess {

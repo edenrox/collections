@@ -3,7 +3,7 @@ package com.hopkins.collections;
 import com.hopkins.collections.HashMap.HashMapEntry;
 
 /**
- *
+ * An {@link Iterator} over the entries in a {@link HashMap}.
  */
 final class HashMapEntryIterator<K, V> implements Iterator<Map.Entry<K, V>> {
     private final HashMapEntry[] table;

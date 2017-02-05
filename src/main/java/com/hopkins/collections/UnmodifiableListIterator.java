@@ -1,13 +1,17 @@
 package com.hopkins.collections;
 
 /**
- *
+ * An implementation of {@link ListIterator} that wraps an underlying 
+ * {@link ListIterator} and does not allow modification.
  */
 final class UnmodifiableListIterator<T> implements ListIterator<T> {
     
     private final ListIterator<T> listIterator;
 
     public UnmodifiableListIterator(ListIterator<T> listIterator) {
+        if (listIterator == null) {
+            throw new NullPointerException();
+        }
         this.listIterator = listIterator;
     }
 
