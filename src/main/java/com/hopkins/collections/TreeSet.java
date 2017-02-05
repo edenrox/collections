@@ -33,7 +33,9 @@ public class TreeSet<T> implements Set<T> {
         boolean isChanged = false;
         Iterator<? extends T> iter = c.iterator();
         while(iter.hasNext()) {
-            isChanged |= add(iter.next());
+            if (add(iter.next())) {
+                isChanged = true;
+            }
         }
         return isChanged;
     }
@@ -83,7 +85,9 @@ public class TreeSet<T> implements Set<T> {
         boolean isChanged = false;
         Iterator<?> iter = c.iterator();
         while(iter.hasNext()) {
-            isChanged |= remove(iter.next());
+            if (remove(iter.next())) {
+                isChanged = true;
+            }
         }
         return isChanged;
     }
