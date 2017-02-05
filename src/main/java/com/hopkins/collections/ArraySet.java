@@ -7,9 +7,14 @@ public class ArraySet<T> implements Set<T> {
     
     private final ArrayList<T> list;
     
-    /** Creates a new empty {@lilnk ArraySet}. */
+    /** Creates a new empty {@link ArraySet}. */
     public ArraySet() {
         list = new ArrayList<>();
+    }
+    
+    /** Creates a new {@link ArraySet} with the specified initial capacity. */
+    public ArraySet(int initialCapacity) {
+        list = new ArrayList<>(initialCapacity);
     }
     
     /** 
