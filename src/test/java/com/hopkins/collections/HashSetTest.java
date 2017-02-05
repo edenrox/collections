@@ -93,6 +93,15 @@ public class HashSetTest {
     }
     
     @Test
+    public void retainAll() {
+        set.addAll(Arrays.asList("one", "two", "three", "four"));
+        set.retainAll(Arrays.asList("two", "four", "size"));
+        
+        assertThat(set.size()).isEqualTo(2);
+        assertThat(set.toArray()).asList().containsExactly("two", "four");
+    }
+    
+    @Test
     public void iterator() {
         Iterator<String> iterator = set.iterator();
         

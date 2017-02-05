@@ -14,7 +14,7 @@ public class HashMap<K, V> implements Map<K, V> {
     private final MapEntryIteratorFactory<K, V> iteratorFactory = new MapEntryIteratorFactory<K, V>() {
         @Override
         public Iterator<Map.Entry<K, V>> newIterator() {
-            return new HashMapEntryIterator(table);
+            return new HashMapEntryIterator(HashMap.this, table);
         }
     };
     

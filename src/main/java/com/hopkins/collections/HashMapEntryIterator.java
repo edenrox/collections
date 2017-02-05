@@ -6,16 +6,22 @@ import com.hopkins.collections.HashMap.HashMapEntry;
  * An {@link Iterator} over the entries in a {@link HashMap}.
  */
 final class HashMapEntryIterator<K, V> implements Iterator<Map.Entry<K, V>> {
-    private final HashMapEntry[] table;
+    private final HashMap<K, V> map;
+    private final HashMapEntry<K, V>[] table;
     private int index = -1;
-    private HashMapEntry next = null;
+    private K keyToRemove = null;
+    private HashMapEntry<K, V> next = null;
     
-    public HashMapEntryIterator(HashMapEntry[] table) {
+    public HashMapEntryIterator(HashMap<K, V> map, HashMapEntry<K, V>[] table) {
+        this.map = map;
         this.table = table;
         moveToNext();
     }
     
     private void moveToNext() {
+        if (next != null) {
+            keyToRemove = next.key;
+        }
         if (next != null && next.next != null) {
             next = next.next;
             return;
@@ -41,13 +47,17 @@ final class HashMapEntryIterator<K, V> implements Iterator<Map.Entry<K, V>> {
         if (next == null) {
             throw new NoSuchElementException();
         }
-        HashMapEntry entry = next;
+        HashMapEntry<K, V> entry = next;
         moveToNext();
-        return (Map.Entry<K, V>) entry;
+        return entry;
     }
 
     @Override
     public void remove() {
-        throw new UnsupportedOperationException();
+        if (keyToRemove == null) {
+            throw new NoSuchElementException();
+        }
+        map.remove(keyToRemove);
+        keyToRemove = null;
     }
 }
