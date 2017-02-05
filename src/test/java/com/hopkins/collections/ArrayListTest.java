@@ -30,6 +30,43 @@ public class ArrayListTest {
     }
     
     @Test
+    public void add() {
+        assertThat(list.add("a")).isTrue();
+        assertThat(list.isEmpty()).isFalse();
+    }
+    
+    @Test
+    public void add_withIndex() {
+        list.add("a");
+        list.add("b");
+        list.add(0, "c");
+        list.add(0, "d");
+        list.add(2, "e");
+        list.add(5, "f");
+        
+        assertThat(list.toArray()).asList()
+                .containsExactly("d", "c", "e", "a", "b", "f")
+                .inOrder();
+    }
+    
+    @Test
+    public void addAll() {
+        assertThat(list.addAll(Arrays.asList("a", "b"))).isTrue();
+        assertThat(list.isEmpty()).isFalse();
+        assertThat(list.toArray()).asList().containsExactly("a", "b").inOrder();
+    }
+    
+    @Test
+    public void addAll_withIndex() {
+        list.addAll(Arrays.asList("a", "b", "c"));
+        list.addAll(0, Arrays.asList("c", "d", "e"));
+        list.addAll(1, Arrays.asList("f", "g"));
+        assertThat(list.toArray()).asList()
+                .containsExactly("c", "f", "g", "d", "e", "a", "b", "c")
+                .inOrder();
+    }
+    
+    @Test
     public void size_returnsZero() {
         assertThat(list.size()).isEqualTo(0);
     }
@@ -269,6 +306,8 @@ public class ArrayListTest {
         list.add("a");
         list.trimToSize();
         assertThat(list.capacity()).isEqualTo(1);
+        
+        list.trimToSize();
     }
     
     @Test
