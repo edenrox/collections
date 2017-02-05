@@ -148,6 +148,18 @@ public final class Collections {
         return max(c, reverseOrder(comparator));
     }
     
+    public static <T> boolean replaceAll(List<T> list, T oldValue, T newValue) {
+        boolean hasChanged = false;
+        ListIterator<T> listIterator = list.listIterator();
+        while (listIterator.hasNext()) {
+            if (Objects.equals(oldValue, listIterator.next())) {
+                listIterator.set(newValue);
+                hasChanged = true;
+            }
+        }
+        return hasChanged;
+    }
+    
     public static <T> void shuffle(List<T> list) {
         shuffle(list, new Random());
     }
