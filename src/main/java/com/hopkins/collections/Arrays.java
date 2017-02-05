@@ -1,6 +1,7 @@
 package com.hopkins.collections;
 
 import java.lang.reflect.Array;
+import java.util.Objects;
 
 public class Arrays {
     
@@ -12,6 +13,36 @@ public class Arrays {
      */
     public static <T> List<T> asList(T... elements) {
         return new FixedSizeList<>(elements);
+    }
+    
+    public static int binarySearch(Object[] array, Object key) {
+        return binarySearch(array, 0, array.length, key);
+    }
+    
+    public static int binarySearch(Object[] array, int fromIndex, int toIndex, Object key) {
+        return binarySearch(array, 0, array.length, key, ComparableComparator.INSTANCE);
+    }
+    
+    public static <T> int binarySearch(T[] array, T key, Comparator<? super T> comparator) {
+        return binarySearch(array, 0, array.length, key, comparator);
+    }
+    
+    public static <T> int binarySearch(T[] array, int fromIndex, int toIndex, T key, Comparator<? super T> comparator) {
+        if (fromIndex >= toIndex) {
+            return List.INDEX_NOT_FOUND;
+        }
+        int middleIndex = fromIndex + (toIndex - fromIndex) / 2;
+        T item = array[middleIndex];
+        if (item == null && key == null) {
+            return middleIndex;
+        } else if (item != null && item.equals(key)) {
+            return middleIndex;
+        }
+        if (comparator.compare(key, item) < 0) {
+            return binarySearch(array, fromIndex, middleIndex, key, comparator);
+        } else {
+            return binarySearch(array, middleIndex + 1, toIndex, key, comparator);
+        }
     }
     
     public static <T> T[] copyOf(T[] original, int newLength) {

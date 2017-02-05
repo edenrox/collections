@@ -136,4 +136,34 @@ public class ArraysTest {
         String[] array = new String[] {"a", "b", "c"};
         Arrays.fill(array, -1, 2, "z");
     }
+    
+    @Test
+    public void binarySearch() {
+        String[] array = new String[] {"a", "b", "c", "d", "e", "f", "g"};
+        
+        assertThat(Arrays.binarySearch(array, "a")).isEqualTo(0);
+        assertThat(Arrays.binarySearch(array, "b")).isEqualTo(1);
+        assertThat(Arrays.binarySearch(array, "d")).isEqualTo(3);
+        assertThat(Arrays.binarySearch(array, "g")).isEqualTo(6);
+        assertThat(Arrays.binarySearch(array, "z")).isEqualTo(-1);
+        assertThat(Arrays.binarySearch(array, "A")).isEqualTo(-1);
+    }
+    
+    @Test
+    public void binarySearch_withReversComparator() {
+        String[] array = new String[] {"g", "f", "e", "d", "c", "b", "a"};
+        
+        assertThat(Arrays.binarySearch(array, "a", Collections.reverseOrder()))
+                .isEqualTo(6);
+        assertThat(Arrays.binarySearch(array, "b", Collections.reverseOrder()))
+                .isEqualTo(5);
+        assertThat(Arrays.binarySearch(array, "d", Collections.reverseOrder()))
+                .isEqualTo(3);
+        assertThat(Arrays.binarySearch(array, "g", Collections.reverseOrder()))
+                .isEqualTo(0);
+        assertThat(Arrays.binarySearch(array, "z", Collections.reverseOrder()))
+                .isEqualTo(-1);
+        assertThat(Arrays.binarySearch(array, "A", Collections.reverseOrder()))
+                .isEqualTo(-1);
+    }
 }
