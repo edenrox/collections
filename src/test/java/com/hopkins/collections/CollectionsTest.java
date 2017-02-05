@@ -59,6 +59,16 @@ public class CollectionsTest {
     }
     
     @Test
+    public void frequency() {
+        List<String> list = Arrays.asList("a", "b", "a", "c", "a");
+        
+        assertThat(Collections.frequency(list, "a")).isEqualTo(3);
+        assertThat(Collections.frequency(list, "b")).isEqualTo(1);
+        assertThat(Collections.frequency(list, "c")).isEqualTo(1);
+        assertThat(Collections.frequency(list, "d")).isEqualTo(0);
+    }
+    
+    @Test
     public void fill_setsAllElements() {
         List<String> list = Arrays.asList("one", "two", "three", "four", "five");
         Collections.fill(list, "baba");

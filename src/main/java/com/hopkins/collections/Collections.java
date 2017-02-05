@@ -1,5 +1,6 @@
 package com.hopkins.collections;
 
+import java.util.Objects;
 import java.util.Random;
 
 public final class Collections {
@@ -20,7 +21,45 @@ public final class Collections {
         return success;
     }
     
+    /**
+     * Returns the index of the specified key in the provided list.  Uses binary
+     * search, so the list must be sorted.
+     */
+    public static <T> int binarySearch(List<? extends Comparable<? super T>> list, T key) {
+        return binarySearch((List<T>) list, key, ComparableComparator.INSTANCE);
+    }
+    
+    /**
+     * Returns the index of the specified key in the provided list.  Uses binary
+     * search, so the list must be sorted.  Uses the specified comparator to
+     * navigate the list.
+     */
+    public static <T> int binarySearch(List<T> list, T key, Comparator<? super T> c) {
+        return binarySearch(list, key, 0, list.size(), c);
+    }
+    
+    private static <T> int binarySearch(List<T> list, T key, int fromIndex, int toIndex, Comparator<? super T> comparator) {
+        if (fromIndex >= toIndex) {
+            return List.INDEX_NOT_FOUND;
+        }
+        int middleIndex = fromIndex + (toIndex - fromIndex) / 2;
+        T item = list.get(middleIndex);
+        if (item == null && key == null) {
+            return middleIndex;
+        } else if (item != null && item.equals(key)) {
+            return middleIndex;
+        }
+        if (comparator.compare(key, item) < 0) {
+            return binarySearch(list, key, fromIndex, middleIndex, comparator);
+        } else {
+            return binarySearch(list, key, middleIndex + 1, toIndex, comparator);
+        }
+    }
+    
     public static <T> void copy(List<? super T> dest, List<? extends T> src) {
+        if (dest.size() < src.size()) {
+            throw new IndexOutOfBoundsException();
+        }
         for (int i = 0; i < src.size(); i++) {
             dest.set(i, src.get(i));
         }
@@ -51,6 +90,21 @@ public final class Collections {
         for (int i = 0; i < list.size(); i++) {
             list.set(i, item);
         }
+    }
+    
+    /** 
+     * Returns the number of elements in the specified collection that is equal 
+     * to {@code item}. 
+     */
+    public static int frequency(Collection<?> c, Object item) {
+        int frequency = 0;
+        Iterator<?> iter = c.iterator();
+        while (iter.hasNext()) {
+            if (Objects.equals(item, iter.next())) {
+                frequency++;
+            }
+        }
+        return frequency;
     }
     
     public static void reverse(List<?> list) {
