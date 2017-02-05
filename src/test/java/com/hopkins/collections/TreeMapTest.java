@@ -65,6 +65,20 @@ public class TreeMapTest {
     }
     
     @Test
+    public void putAll() {
+        TreeMap<String, Integer> tempMap = new TreeMap<>();
+        tempMap.put("a", 1);
+        tempMap.put("b", 2);
+        
+        map.put("c", 3);
+        map.putAll(tempMap);
+        
+        assertThat(map.get("a")).isEqualTo(1);
+        assertThat(map.get("b")).isEqualTo(2);
+        assertThat(map.get("c")).isEqualTo(3);
+    }
+    
+    @Test
     public void remove_whenEmpty() {
         assertThat(map.remove("one")).isNull();   
     }
@@ -113,6 +127,50 @@ public class TreeMapTest {
         assertThat(map.containsValue(2)).isTrue();
         assertThat(map.containsValue(3)).isTrue();
         assertThat(map.containsValue(5)).isFalse();
+    }
+    
+    @Test
+    public void keySet() {
+        map.put("a", 1);
+        map.put("b", 2);
+        map.put("c", 3);
+        map.put("d", 4);
+        map.put("e", 5);
+        map.put("f", 6);
+        map.put("g", 7);
+        map.put("h", 8);
+        map.put("i", 9);
+        map.put("j", 10);
+        
+        assertThat(map.keySet().toArray()).asList()
+                .containsExactly("a", "b", "c", "d", "e", "f", "g", "h", "i", "j")
+                .inOrder();
+    }
+    
+    @Test
+    public void keySet_withEmpty() {
+        assertThat(map.keySet().isEmpty()).isTrue();
+        assertThat(map.keySet().iterator().hasNext()).isFalse();
+    }
+    
+    @Test
+    public void keySet_withSingleItem() {
+        map.put("a", 1);
+        assertThat(map.keySet().toArray()).asList().containsExactly("a");
+    }
+    
+    @Test
+    public void values() {
+        map.put("a", 10);
+        map.put("b", 9);
+        map.put("c", 8);
+        map.put("d", 7);
+        map.put("e", 6);
+        map.put("f", 5);
+        
+        assertThat(map.values().toArray()).asList()
+                .containsExactly(10, 9, 8, 7, 6, 5)
+                .inOrder();
     }
     
     @Test
