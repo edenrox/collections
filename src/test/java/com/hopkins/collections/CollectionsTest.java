@@ -141,4 +141,16 @@ public class CollectionsTest {
         List<String> list = new ArrayList<>();
         Collections.sort(list);
     }
+    
+    @Test
+    public void shuffle() {
+        List<Integer> list = new ArrayList<>(100);
+        for (int i = 0; i < 100; i++) {
+            list.add(i);
+        }
+        List<Integer> copy = new ArrayList<>(list);
+        Collections.shuffle(list);
+        
+        assertThat(list.toArray()).asList().containsExactly(copy.toArray());
+    }
 }

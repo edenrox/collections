@@ -1,5 +1,7 @@
 package com.hopkins.collections;
 
+import java.util.Random;
+
 public final class Collections {
     public static final List EMPTY_LIST = 
             unmodifiableList(new FixedSizeList<>(new Object[0]));
@@ -90,6 +92,17 @@ public final class Collections {
     
     public static <T> T min(Collection<T> c, Comparator<T> comparator) {
         return max(c, reverseOrder(comparator));
+    }
+    
+    public static <T> void shuffle(List<T> list) {
+        shuffle(list, new Random());
+    }
+    
+    public static <T> void shuffle(List<T> list, Random rnd) {
+        for (int i = list.size() - 1; i > 0; i--) {
+            int j = rnd.nextInt(i);
+            swap(list, i, j);
+        }
     }
     
     /** 
