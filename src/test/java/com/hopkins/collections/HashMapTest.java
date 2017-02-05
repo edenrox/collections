@@ -189,4 +189,21 @@ public class HashMapTest {
         
         assertThat(map.values().toArray()).asList().containsExactly(1, 2, 3);
     }
+    
+    @Test
+    public void clear_whenEmpty() {
+        map.clear();
+        assertThat(map.isEmpty()).isTrue();
+    }
+    
+    @Test
+    public void entrySetValue() {
+        map.put("one", 1);
+        assertThat(map.get("one")).isEqualTo(1);
+        
+        Map.Entry<String, Integer> entry = map.entrySet().iterator().next();
+        entry.setValue(2);
+        
+        assertThat(map.get("one")).isEqualTo(2);
+    }
 }
