@@ -168,18 +168,46 @@ public class TreeMap<K, V> implements Map<K, V> {
             } else {
                 // Split the node into two
                 InnerTreeNode<K> splitNode = new InnerTreeNode<>();
-                if (comparator.compare(getMaximum(newNode), innerNode.leftPivot) < 0) {
+                K newNodeMax = getMaximum(newNode);
+                if (comparator.compare(newNodeMax, innerNode.leftPivot) < 0) {
+                    // [New, left] [middle, right]
                     splitNode.left = newNode;
-                    splitNode.leftPivot = getMaximum(newNode);
-                    splitNode.right = innerNode.left;
+                    splitNode.leftPivot = newNodeMax;
+                    splitNode.middle = innerNode.left;
                     
                     innerNode.left = innerNode.middle;
                     innerNode.leftPivot = innerNode.rightPivot;
                     innerNode.middle = innerNode.right;
-                    innerNode.rightPivot = null;
-                    innerNode.right = null;
+                } else if (comparator.compare(newNodeMax, innerNode.rightPivot) < 0) {
+                    // [left, New] [middle, right]
+                    splitNode.left = innerNode.left;
+                    splitNode.leftPivot = innerNode.leftPivot;
+                    splitNode.middle = newNode;
+                    
+                    innerNode.left = innerNode.middle;
+                    innerNode.leftPivot = innerNode.rightPivot;
+                    innerNode.middle = innerNode.right;
+                } else if (comparator.compare(newNodeMax, getMaximum(innerNode.right)) < 0) {
+                    // [left, middle] [New, right]
+                    splitNode.left = newNode;
+                    splitNode.leftPivot = newNodeMax;
+                    splitNode.middle = innerNode.right;
+                } else {
+                    // [left, middle] [right, new]
+                    splitNode.left = innerNode.right;
+                    splitNode.leftPivot = getMaximum(innerNode.right);
+                    splitNode.middle = newNode;
                 }
+                innerNode.rightPivot = null;
+                innerNode.right = null;
+                splitNode.left.setParent(splitNode);
+                splitNode.middle.setParent(splitNode);
                 
+                if (innerNode.parent == null) {
+                    makeNewRoot(innerNode, splitNode);
+                } else {
+                    addToNode(innerNode.parent, splitNode);
+                }
             }
         }
     }

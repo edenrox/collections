@@ -15,17 +15,19 @@ public class TreeMapTest {
     
     @Test
     public void init() {
-//        map.put("one", 1);
-//        map.put("two", 2);
-//        map.put("three", 3);
-//        
-//        TreeMap<String, Integer> map2 = new TreeMap<>(map);
-//        
-//        map.remove("one");
-//        
-//        assertThat(map2.size()).isEqualTo(3);
-//        assertThat(map2.containsKey("one")).isTrue();
-//        assertThat(map2.containsKey("three")).isTrue();
+        map = new TreeMap<>();
+        assertThat(map.isEmpty());
+        assertThat(map.size()).isEqualTo(0);
+        
+        map = new TreeMap<>(Collections.singletonMap("a", 1));
+        assertThat(map.isEmpty()).isFalse();
+        assertThat(map.size()).isEqualTo(1);
+        assertThat(map.get("a")).isEqualTo(1);
+    }
+    
+    @Test(expected = NullPointerException.class)
+    public void init_withNullComparator_throws() {
+        new TreeMap<>((Comparator) null);
     }
     
     @Test
@@ -37,8 +39,14 @@ public class TreeMapTest {
         
         map.put("two", 2);
         assertThat(map.size()).isEqualTo(2);
+    }
+    
+    @Test
+    public void clear() {
+        map.put("a", 1);
         
         map.clear();
+        assertThat(map.isEmpty()).isTrue();
         assertThat(map.size()).isEqualTo(0);
     }
     
@@ -51,16 +59,23 @@ public class TreeMapTest {
         assertThat(value).isEqualTo(2);
     }
     
+    @Test(expected = NullPointerException.class)
+    public void put_withNull_throws() {
+        map.put(null, 1);
+    }
+    
     @Test
-    public void put_remove() {
-        assertThat(map.remove("one")).isNull();
-        
+    public void remove_whenEmpty() {
+        assertThat(map.remove("one")).isNull();   
+    }
+    
+    @Test
+    public void remove_afterPut() {
         map.put("one", 1);
         
-        assertThat(map.remove("two")).isNull();
         assertThat(map.remove("one")).isEqualTo(1);
         assertThat(map.isEmpty()).isTrue();
-        
+    
         map.put("a", 1);
         map.put("b", 2);
         map.put("c", 3);
@@ -119,6 +134,18 @@ public class TreeMapTest {
         
         map.put("c", 3);
         System.err.println("\n[[ Four Item TreeMap ]]");
+        System.err.println(map.debugString());
+        
+        map.put("g", 7);
+        System.err.println("\n[[ Five Item TreeMap ]]");
+        System.err.println(map.debugString());
+        
+        map.put("e", 5);
+        System.err.println("\n[[ Six Item TreeMap ]]");
+        System.err.println(map.debugString());
+        
+        map.put("f", 6);
+        System.err.println("\n[[ Seven Item TreeMap ]]");
         System.err.println(map.debugString());
     }
 }
