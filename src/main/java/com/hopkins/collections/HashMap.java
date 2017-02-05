@@ -55,9 +55,7 @@ public class HashMap<K, V> implements Map<K, V> {
             return;
         }
         size = 0;
-        for (int i = 0; i < table.length; i++) {
-            table[i] = null;
-        }
+        Arrays.fill(table, null);
     }
 
     @Override
