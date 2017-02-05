@@ -25,14 +25,21 @@ final class RandomAccessListIterator<E> implements ListIterator<E> {
 
     @Override
     public E next() {
+        if (index == list.size()) {
+            throw new NoSuchElementException();
+        }
         indexToRemove = index;
         return list.get(index++);
     }
     
+    @Override
     public E previous() {
+        if (index == 0) {
+            throw new NoSuchElementException();
+        }
         index--;
         indexToRemove = index;
-        return list.get(index--);
+        return list.get(index);
     }
 
     @Override
