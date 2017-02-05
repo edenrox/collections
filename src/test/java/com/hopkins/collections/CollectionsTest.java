@@ -135,4 +135,10 @@ public class CollectionsTest {
             lastItem = item;
         }
     }
+    
+    @Test
+    public void sort_emptyList() {
+        List<String> list = new ArrayList<>();
+        Collections.sort(list);
+    }
 }
