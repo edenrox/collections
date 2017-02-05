@@ -98,4 +98,41 @@ public class CollectionsTest {
         assertThat(list.get(0)).isEqualTo("d");
         assertThat(list.get(3)).isEqualTo("a");
     }
+    
+    @Test
+    public void selectionSort() {
+        List<String> list = Arrays.asList("e", "z", "c", "g", "a", "y", "h", "l");
+        Collections.selectionSort(list, 0, list.size(), ComparableComparator.INSTANCE);
+        
+        assertThat(list.toArray()).asList()
+                .containsExactly("a", "c", "e", "g", "h", "l", "y", "z")
+                .inOrder();
+        
+        list = Arrays.asList("a", "c", "e", "g", "h", "l", "y", "z");
+        Collections.selectionSort(list, 0, list.size(), ComparableComparator.INSTANCE);
+        
+        assertThat(list.toArray()).asList()
+                .containsExactly("a", "c", "e", "g", "h", "l", "y", "z")
+                .inOrder();
+    }
+    
+    @Test
+    public void sort() {
+        List<String> list = new ArrayList<>(100);
+        
+        // Build a random list of 100 Strings
+        for (int i = 0; i < 100; i++) {
+            list.add(String.valueOf('a' + (char) Math.floor(26 * Math.random())));
+        }
+        
+        // Sort the list
+        Collections.sort(list);
+        
+        String lastItem = list.get(0);
+        for (int i = 1; i < 100; i++) {
+            String item = list.get(i);
+            assertThat(lastItem).isAtMost(item);
+            lastItem = item;
+        }
+    }
 }

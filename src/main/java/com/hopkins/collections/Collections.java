@@ -93,25 +93,88 @@ public final class Collections {
     }
     
     /** 
-     * Returns a non-modifiable {@link List} containing only the specified item. 
+     * Returns an immutable {@link List} containing only the specified item.
      */
     public static <T> List<T> singletonList(T item) {
         return unmodifiableList(FixedSizeList.singletonList(item));
     }
     
+    /** Returns an immutable {@link Set} containing only the specified item. */
     public static <T> Set<T> singleton(T item) {
-        Set<T> set = new ArraySet<>();
-        set.add(item);
-        return unmodifiableSet(set);
+        return new SingletonSet<>(item);
     }
     
+    /** 
+     * Returns an immutable {@link Map} containing only the specified key/value 
+     * pair. 
+     */
+    public static <K, V> Map<K, V> singletonMap(K key, V value) {
+        return new SingletonMap<>(key, value);
+    }
+    
+    /** 
+     * Sort the specified {@link List} according to the ordering of the items.  
+     * 
+     * <p>Note: the items must implement {@link Comparable}.
+     */
     public static <T extends Comparable<? super T>> void sort(List<T> list) {
         sort(list, ComparableComparator.INSTANCE);
     }
     
+    /** 
+     * Sort the specified {@link List}, ordering items using the specified 
+     * {@link Comparator}.
+     */
     public static <T> void sort(List<T> list, Comparator<? super T> c) {
-        // TODO(edenrox)
+        quickSort(list, 0, list.size(), c);
     }
+    
+    private static <T> void quickSort(List<T> list, int fromIndex, int toIndex, Comparator<? super T> c) {
+        int size = toIndex - fromIndex;
+        if (size < 2) {
+            // Lists of size 0/1 are sorted by definition
+            return;
+        }
+        if (size < 10) {
+            // Use selection sort for small lists
+            selectionSort(list, fromIndex, toIndex, c);
+            return;
+        }
+        int pivotIndex = fromIndex + (int) Math.floor(Math.random() * size);
+        T pivot = list.get(pivotIndex);
+        int minListEndIndex = fromIndex;
+        swap(list, pivotIndex, fromIndex);
+        for (int i = fromIndex + 1; i < toIndex; i++) {
+            T item = list.get(i);
+            if (c.compare(pivot, item) > 0) {
+                minListEndIndex++;
+                swap(list, minListEndIndex, i);
+            }
+        }
+        swap(list, fromIndex, minListEndIndex);
+        quickSort(list, fromIndex, minListEndIndex, c);
+        quickSort(list, minListEndIndex + 1, toIndex, c);
+    }
+    
+    static <T> void selectionSort(List<T> list, int fromIndex, int toIndex, Comparator<? super T> c) {
+        int size = toIndex - fromIndex;
+        if (size < 2) {
+            // Lists of size 0/1 are sorted by definition
+            return;
+        }
+        for (int i = fromIndex; i < toIndex; i++) {
+            T minItem = null;
+            int minIndex = -1;
+            for (int j = i; j < toIndex; j++) {
+                T item = list.get(j);
+                if (minItem == null || c.compare(minItem, item) > 0) {
+                    minIndex = j;
+                    minItem = item;
+                }
+            }
+            swap(list, i, minIndex);
+        }
+    }    
     
     public static void swap(List<?> list, int i, int j) {
         if (i == j) {
