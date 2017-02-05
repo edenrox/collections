@@ -113,4 +113,27 @@ public class ArraysTest {
         assertThat(Arrays.copyOfRange(array, 2, 5)).asList()
                 .containsExactly("c", null, null).inOrder();
     }
+    
+    @Test
+    public void fill() {
+        String[] array = new String[] {"a", "b", "c"};
+        Arrays.fill(array, "z");
+        assertThat(array).asList().containsExactly("z", "z", "z");
+    }
+    
+    @Test
+    public void fill_withRange() {
+        String[] array = new String[] {"a", "b", "c"};
+        Arrays.fill(array, 1, 2, "z");
+        assertThat(array).asList().containsExactly("a", "z", "c");
+        
+        Arrays.fill(array, 1, 3, "f");
+        assertThat(array).asList().containsExactly("a", "f", "f");
+    }
+    
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void fill_withInvalidRange_throws() {
+        String[] array = new String[] {"a", "b", "c"};
+        Arrays.fill(array, -1, 2, "z");
+    }
 }

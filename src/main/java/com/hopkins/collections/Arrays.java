@@ -32,6 +32,22 @@ public class Arrays {
         return newArray;
     }
     
+    public static void fill(Object[] array, Object value) {
+        fill(array, 0, array.length, value);
+    }
+    
+    public static void fill(Object[] array, int fromIndex, int toIndex, Object value) {
+        if (fromIndex < 0 || fromIndex > array.length || toIndex > array.length) {
+            throw new IndexOutOfBoundsException();
+        }
+        if (fromIndex > toIndex) {
+            throw new IllegalArgumentException();
+        }
+        for (int i = fromIndex; i < toIndex; i++) {
+            array[i] = value;
+        }
+    }
+    
     /** 
      * Returns a {@link String} representation of the specified array of 
      * {@link Object}s. 
