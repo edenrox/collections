@@ -43,8 +43,6 @@ public class SingletonSetTest {
         String[] array = new String[] {"b", "b", "b"};
         set.toArray(array);
         assertThat(array).asList().containsExactly("a", null, "b").inOrder();
-        
-        
     }
     
     @Test(expected = UnsupportedOperationException.class)
