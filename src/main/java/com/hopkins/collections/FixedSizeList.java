@@ -135,6 +135,11 @@ final class FixedSizeList<T> implements List<T>, RandomAccess {
     }
 
     @Override
+    public List<T> subList(int fromIndex, int toIndex) {
+        return new RandomAccessSubList<>(this, fromIndex, toIndex);
+    }
+
+    @Override
     public Object[] toArray() {
         return data;
     }

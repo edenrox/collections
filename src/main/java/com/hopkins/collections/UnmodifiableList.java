@@ -71,7 +71,7 @@ final class UnmodifiableList<E> implements List<E> {
 
     @Override
     public ListIterator<E> listIterator() {
-        return new UnmodifiableListIterator(list.listIterator());
+        return new UnmodifiableListIterator<>(list.listIterator());
     }
 
     @Override
@@ -107,6 +107,11 @@ final class UnmodifiableList<E> implements List<E> {
     @Override
     public int size() {
         return list.size();
+    }
+
+    @Override
+    public List<E> subList(int fromIndex, int toIndex) {
+        return Collections.unmodifiableList(list.subList(fromIndex, toIndex));
     }
 
     @Override

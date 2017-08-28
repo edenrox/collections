@@ -19,5 +19,7 @@ public interface List<T> extends Collection<T> {
     
     T set(int index, T element);
     
-    //List<E> subList(int fromIndex, int toIndex);
+    List<T> subList(int fromIndex, int toIndex);
+    
+    //void removeRange(int fromIndex, int toIndex);
 }

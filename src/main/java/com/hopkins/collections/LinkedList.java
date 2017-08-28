@@ -291,7 +291,19 @@ public class LinkedList<E> implements List<E>, Queue<E> {
         }
         throw new IllegalStateException("Node structure corrupt");
     }
-    
+
+    @Override
+    public List<E> subList(int fromIndex, int toIndex) {
+        if (fromIndex < 0 || toIndex < fromIndex) {
+            throw new IndexOutOfBoundsException();
+        }
+        LinkedList list = new LinkedList<>();
+        list.head = nodeAt(fromIndex);
+        list.tail = nodeAt(toIndex);
+        list.size = toIndex - fromIndex;
+        return list;
+    }
+
     @Override
     public Object[] toArray() {
         Object[] a = new Object[size];

@@ -212,6 +212,11 @@ public class ArrayList<E> implements List<E>, RandomAccess {
     }
 
     @Override
+    public List<E> subList(int fromIndex, int toIndex) {
+        return null;
+    }
+
+    @Override
     public Object[] toArray() {
         return Arrays.copyOf(data, size);
     }
