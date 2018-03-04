@@ -213,7 +213,7 @@ public class ArrayList<E> implements List<E>, RandomAccess {
 
     @Override
     public List<E> subList(int fromIndex, int toIndex) {
-        return null;
+        return new RandomAccessSubList<>(this, fromIndex, toIndex);
     }
 
     @Override
