@@ -159,4 +159,16 @@ public class SparseArray<E> {
   public int size() {
     return size;
   }
+
+  public int[] getKeys() {
+    int[] copy = new int[size];
+    System.arraycopy(keys, 0, copy, 0, size);
+    return copy;
+  }
+
+  public Object[] getValues() {
+    Object[] copy = new Object[size];
+    System.arraycopy(values, 0, copy, 0, size);
+    return copy;
+  }
 }

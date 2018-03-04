@@ -62,11 +62,34 @@ public class SparseArrayTest {
     empty.put(0, "zero");
     empty.put(4, "four");
 
-    assertThat(empty.valueAt(0)).isEqualTo("zero");
-    assertThat(empty.keyAt(0)).isEqualTo(0);
-    assertThat(empty.valueAt(1)).isEqualTo("one");
-    assertThat(empty.keyAt(1)).isEqualTo(1);
-    assertThat(empty.valueAt(2)).isEqualTo("two");
-    assertThat(empty.keyAt(2)).isEqualTo(2);
+    assertThat(empty.getKeys()).asList().containsExactly(0, 1, 2, 3, 4, 5).inOrder();
+    assertThat(empty.getValues()).asList().containsExactly("zero", "one", "two", "three", "four", "five").inOrder();
+  }
+
+  @Test
+  public void remove_withExistingKey_decrementsSize() {
+    single.remove(KEY);
+
+    assertThat(single.size()).isEqualTo(0);
+  }
+
+  @Test
+  public void remove_withNonExistingKey_doesNotChangeSize() {
+    single.remove(4);
+
+    assertThat(single.size()).isEqualTo(1);
+  }
+
+  @Test
+  public void putAndRemove() {
+    empty.put(1, "one");
+    empty.put(3, "three");
+    empty.put(5, "five");
+    empty.remove(3);
+    empty.put(0, "zero");
+    empty.remove(1);
+
+    assertThat(empty.getKeys()).asList().containsExactly(0,5).inOrder();
+    assertThat(empty.getValues()).asList().containsExactly("zero", "five").inOrder();
   }
 }
