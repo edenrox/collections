@@ -1,102 +1,106 @@
 package com.hopkins.collections;
 
-/** 
- * An implementation of a {@link Set} that is backed by an {@link ArrayList}. 
+/**
+ * An implementation of a {@link Set} that is backed by an {@link ArrayList}.
  */
 public class ArraySet<T> implements Set<T> {
-    
-    private final ArrayList<T> list;
-    
-    /** Creates a new empty {@link ArraySet}. */
-    public ArraySet() {
-        list = new ArrayList<>();
-    }
-    
-    /** Creates a new {@link ArraySet} with the specified initial capacity. */
-    public ArraySet(int initialCapacity) {
-        list = new ArrayList<>(initialCapacity);
-    }
-    
-    /** 
-     * Creates a new {@link ArraySet} containing the elements of the specified 
-     * {@link Collection}. 
-     */
-    public ArraySet(Collection<? extends T> c) {
-        list = new ArrayList<>();
-        addAll(c);
-    }
 
-    @Override
-    public boolean add(T item) {
-        if (list.contains(item)) {
-            return false;
-        }
-        list.add(item);
-        return true;
-    }
+  private final ArrayList<T> list;
 
-    @Override
-    public boolean addAll(Collection<? extends T> c) {
-        Iterator<? extends T> iter = c.iterator();
-        boolean modified = false;
-        while (iter.hasNext()) {
-            modified |= add(iter.next());
-        }
-        return modified;
-    }
+  /**
+   * Creates a new empty {@link ArraySet}.
+   */
+  public ArraySet() {
+    list = new ArrayList<>();
+  }
 
-    @Override
-    public void clear() {
-        list.clear();
-    }
+  /**
+   * Creates a new {@link ArraySet} with the specified initial capacity.
+   */
+  public ArraySet(int initialCapacity) {
+    list = new ArrayList<>(initialCapacity);
+  }
 
-    @Override
-    public boolean contains(Object item) {
-        return list.contains(item);
-    }
+  /**
+   * Creates a new {@link ArraySet} containing the elements of the specified
+   * {@link Collection}.
+   */
+  public ArraySet(Collection<? extends T> c) {
+    list = new ArrayList<>();
+    addAll(c);
+  }
 
-    @Override
-    public boolean containsAll(Collection<?> c) {
-        return list.containsAll(c);
+  @Override
+  public boolean add(T item) {
+    if (list.contains(item)) {
+      return false;
     }
+    list.add(item);
+    return true;
+  }
 
-    @Override
-    public boolean isEmpty() {
-        return list.isEmpty();
+  @Override
+  public boolean addAll(Collection<? extends T> c) {
+    Iterator<? extends T> iter = c.iterator();
+    boolean modified = false;
+    while (iter.hasNext()) {
+      modified |= add(iter.next());
     }
+    return modified;
+  }
 
-    @Override
-    public Iterator<T> iterator() {
-        return list.iterator();
-    }
+  @Override
+  public void clear() {
+    list.clear();
+  }
 
-    @Override
-    public boolean remove(Object item) {
-        return list.remove(item);
-    }
+  @Override
+  public boolean contains(Object item) {
+    return list.contains(item);
+  }
 
-    @Override
-    public boolean removeAll(Collection<?> c) {
-        return list.removeAll(c);
-    }
+  @Override
+  public boolean containsAll(Collection<?> c) {
+    return list.containsAll(c);
+  }
 
-    @Override
-    public boolean retainAll(Collection<?> c) {
-        return list.retainAll(c);
-    }
+  @Override
+  public boolean isEmpty() {
+    return list.isEmpty();
+  }
 
-    @Override
-    public int size() {
-        return list.size();
-    }
+  @Override
+  public Iterator<T> iterator() {
+    return list.iterator();
+  }
 
-    @Override
-    public Object[] toArray() {
-        return list.toArray();
-    }
+  @Override
+  public boolean remove(Object item) {
+    return list.remove(item);
+  }
 
-    @Override
-    public T[] toArray(T[] a) {
-        return list.toArray(a);
-    }
+  @Override
+  public boolean removeAll(Collection<?> c) {
+    return list.removeAll(c);
+  }
+
+  @Override
+  public boolean retainAll(Collection<?> c) {
+    return list.retainAll(c);
+  }
+
+  @Override
+  public int size() {
+    return list.size();
+  }
+
+  @Override
+  public Object[] toArray() {
+    return list.toArray();
+  }
+
+  @Override
+  public T[] toArray(T[] a) {
+    return list.toArray(a);
+  }
 }

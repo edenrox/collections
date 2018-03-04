@@ -6,9 +6,8 @@
 package com.hopkins.collections;
 
 /**
- *
  * @author ian_000
  */
 interface MapEntryIteratorFactory<K, V> {
-    Iterator<Map.Entry<K, V>> newIterator();
+  Iterator<Map.Entry<K, V>> newIterator();
 }

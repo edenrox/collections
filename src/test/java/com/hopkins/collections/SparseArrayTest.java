@@ -89,7 +89,7 @@ public class SparseArrayTest {
     empty.put(0, "zero");
     empty.remove(1);
 
-    assertThat(empty.getKeys()).asList().containsExactly(0,5).inOrder();
+    assertThat(empty.getKeys()).asList().containsExactly(0, 5).inOrder();
     assertThat(empty.getValues()).asList().containsExactly("zero", "five").inOrder();
   }
 }
