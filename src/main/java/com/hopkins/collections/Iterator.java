@@ -16,5 +16,7 @@ public interface Iterator<T> {
    * Removes from the underlying collection the last element returned by
    * this iterator (optional operation).
    */
-  void remove();
+  default void remove() {
+    throw new UnsupportedOperationException();
+  }
 }
