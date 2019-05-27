@@ -1,4 +1,10 @@
 package com.hopkins.collections.stream;
 
-public class SpinedBuffer {
+final class SpinedBuffer<T> {
+
+
+    private T[] cur;
+
+
+
 }
