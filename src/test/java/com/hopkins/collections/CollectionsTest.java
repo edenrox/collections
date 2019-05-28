@@ -113,14 +113,14 @@ public class CollectionsTest {
   @Test
   public void selectionSort() {
     List<String> list = Arrays.asList("e", "z", "c", "g", "a", "y", "h", "l");
-    Collections.selectionSort(list, 0, list.size(), ComparableComparator.INSTANCE);
+    Collections.selectionSort(list, 0, list.size(), Comparator.naturalOrder());
 
     assertThat(list.toArray()).asList()
         .containsExactly("a", "c", "e", "g", "h", "l", "y", "z")
         .inOrder();
 
     list = Arrays.asList("a", "c", "e", "g", "h", "l", "y", "z");
-    Collections.selectionSort(list, 0, list.size(), ComparableComparator.INSTANCE);
+    Collections.selectionSort(list, 0, list.size(), Comparator.naturalOrder());
 
     assertThat(list.toArray()).asList()
         .containsExactly("a", "c", "e", "g", "h", "l", "y", "z")

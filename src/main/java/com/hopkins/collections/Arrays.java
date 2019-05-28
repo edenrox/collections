@@ -23,7 +23,7 @@ public class Arrays {
   }
 
   public static int binarySearch(Object[] array, int fromIndex, int toIndex, Object key) {
-    return binarySearch(array, 0, array.length, key, ComparableComparator.INSTANCE);
+    return binarySearch(array, 0, array.length, key, (Comparator) Comparator.naturalOrder());
   }
 
   public static <T> int binarySearch(T[] array, T key, Comparator<? super T> comparator) {
@@ -80,6 +80,70 @@ public class Arrays {
     for (int i = fromIndex; i < toIndex; i++) {
       array[i] = value;
     }
+  }
+
+  public static void sort(Object[] array) {
+    sort(array, Comparator.NATURAL_ORDER);
+  }
+
+  public static <T> void sort(T[] array, Comparator<? super T> comparator) {
+    quickSort(array, 0, array.length, comparator);
+  }
+
+  private static <T> void quickSort(T[] array, int fromIndex, int toIndex, Comparator<? super T> c) {
+    int size = toIndex - fromIndex;
+    if (size < 2) {
+      // Lists of size 0/1 are sorted by definition
+      return;
+    }
+    if (size < 10) {
+      // Use selection sort for small lists
+      selectionSort(array, fromIndex, toIndex, c);
+      return;
+    }
+    int pivotIndex = fromIndex + (int) Math.floor(Math.random() * size);
+    T pivot = array[pivotIndex];
+    int minListEndIndex = fromIndex;
+    swap(array, pivotIndex, fromIndex);
+    for (int i = fromIndex + 1; i < toIndex; i++) {
+      T item = array[i];
+      if (c.compare(pivot, item) > 0) {
+        minListEndIndex++;
+        swap(array, minListEndIndex, i);
+      }
+    }
+    swap(array, fromIndex, minListEndIndex);
+    quickSort(array, fromIndex, minListEndIndex, c);
+    quickSort(array, minListEndIndex + 1, toIndex, c);
+  }
+
+  private static <T> void selectionSort(T[] array, int fromIndex, int toIndex, Comparator<? super T> c) {
+    int size = toIndex - fromIndex;
+    if (size < 2) {
+      // Lists of size 0/1 are sorted by definition
+      return;
+    }
+    for (int i = fromIndex; i < toIndex; i++) {
+      T minItem = null;
+      int minIndex = -1;
+      for (int j = i; j < toIndex; j++) {
+        T item = array[j];
+        if (minItem == null || c.compare(minItem, item) > 0) {
+          minIndex = j;
+          minItem = item;
+        }
+      }
+      swap(array, i, minIndex);
+    }
+  }
+
+  private  static void swap(Object[] array, int i, int j) {
+    if (i == j) {
+      return;
+    }
+    Object o = array[i];
+    array[i] = array[j];
+    array[j] = o;
   }
 
   /**

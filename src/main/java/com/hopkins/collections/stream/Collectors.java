@@ -30,7 +30,23 @@ public final class Collectors {
     }
 
     public static Collector<String, StringBuilder, String> joining(String delimiter) {
-        return Collector.of(StringBuilder::new, StringBuilder::append, StringBuilder::toString);
+        return Collector.of(
+                StringBuilder::new,
+                (builder, item) -> appendWithDelimiter(builder, "", item, delimiter),
+                StringBuilder::toString);
+    }
+
+    public static Collector<String, StringBuilder, String> joining(String delimiter, String prefix, String suffix) {
+        return Collector.of(
+                StringBuilder::new,
+                (builder, item) -> appendWithDelimiter(builder, prefix, item, delimiter),
+                (builder) -> builder.append(suffix).toString());
+    }
+
+    private static void appendWithDelimiter(StringBuilder builder, String prefix, String item, String delimiter) {
+        builder
+            .append(builder.length() == 0 ? prefix : delimiter)
+            .append(item);
     }
 
     public static <T, S> Collector<T, Map<S, List<T>>, Map<S, List<T>>> groupingBy(Function<T, S> groupMapper) {
@@ -45,9 +61,9 @@ public final class Collectors {
                 });
     }
 
-    public static <T> Collector<T, Long[], Long> counting() {
+    public static <T> Collector<T, long[], Long> counting() {
         return Collector.of(
-                () -> new Long[1],
+                () -> new long[] {0L},
                 (arr, item) -> arr[0]++,
                 (arr) -> arr[0]);
     }

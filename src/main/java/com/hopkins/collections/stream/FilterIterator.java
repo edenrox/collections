@@ -25,7 +25,9 @@ final class FilterIterator<T> implements Iterator<T> {
         if (!hasNext()) {
             throw new NoSuchElementException();
         }
-        return next;
+        T item = next;
+        next = null;
+        return item;
     }
 
     private boolean moveToNext() {

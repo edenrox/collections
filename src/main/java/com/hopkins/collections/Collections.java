@@ -13,9 +13,6 @@ public final class Collections {
   public static final Set EMPTY_SET = new EmptySet();
   public static final Iterator EMPTY_ITERATOR = new EmptyIterator();
 
-  private static final Comparator REVERSE_COMPARATOR =
-      new ReverseComparator(ComparableComparator.INSTANCE);
-
   public static <T> boolean addAll(Collection<? super T> c, T... elements) {
     boolean success = true;
     for (T item : elements) {
@@ -29,7 +26,7 @@ public final class Collections {
    * search, so the list must be sorted.
    */
   public static <T> int binarySearch(List<? extends Comparable<? super T>> list, T key) {
-    return binarySearch((List<T>) list, key, ComparableComparator.INSTANCE);
+    return binarySearch((List<T>) list, key, (Comparator) Comparator.naturalOrder());
   }
 
   /**
@@ -126,7 +123,7 @@ public final class Collections {
    * Returns a {@link Comparator} that is the reverse of the
    */
   public static <T> Comparator<T> reverseOrder() {
-    return (Comparator<T>) REVERSE_COMPARATOR;
+    return (Comparator<T>) Comparator.reversedOrder();
   }
 
   public static <T> Comparator<T> reverseOrder(Comparator<T> comparator) {
@@ -134,7 +131,7 @@ public final class Collections {
   }
 
   public static <T> T max(Collection<T> c) {
-    return max(c, (Comparator<T>) ComparableComparator.INSTANCE);
+    return max(c, (Comparator<T>) Comparator.naturalOrder());
   }
 
   public static <T> T max(Collection<T> c, Comparator<T> comparator) {
@@ -150,7 +147,7 @@ public final class Collections {
   }
 
   public static <T> T min(Collection<T> c) {
-    return min(c, (Comparator<T>) ComparableComparator.INSTANCE);
+    return min(c, (Comparator<T>) Comparator.naturalOrder());
   }
 
   public static <T> T min(Collection<T> c, Comparator<T> comparator) {
@@ -208,7 +205,7 @@ public final class Collections {
    * <p>Note: the items must implement {@link Comparable}.
    */
   public static <T extends Comparable<? super T>> void sort(List<T> list) {
-    sort(list, ComparableComparator.INSTANCE);
+    sort(list, Comparator.NATURAL_ORDER);
   }
 
   /**

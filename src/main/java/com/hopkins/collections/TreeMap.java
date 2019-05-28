@@ -21,7 +21,7 @@ public class TreeMap<K, V> implements Map<K, V> {
   private int size;
 
   public TreeMap() {
-    this.comparator = ComparableComparator.INSTANCE;
+    this.comparator = (Comparator<K>) Comparator.naturalOrder();
   }
 
   public TreeMap(Comparator<K> comparator) {
@@ -32,7 +32,7 @@ public class TreeMap<K, V> implements Map<K, V> {
   }
 
   public TreeMap(Map<? extends K, ? extends V> map) {
-    this.comparator = ComparableComparator.INSTANCE;
+    this.comparator = (Comparator<K>) Comparator.naturalOrder();
     putAll(map);
   }
 
